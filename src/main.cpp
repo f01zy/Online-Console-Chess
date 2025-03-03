@@ -31,6 +31,11 @@ void sign_up(const string &email, const string &username,
     string fields =
         "email=" + email + "&username=" + username + "&password=" + password;
 
+    struct curl_slist *headers = NULL;
+    headers = curl_slist_append(
+        headers, "Content-Type: application/x-www-form-urlencoded");
+
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, fields.c_str());
 
@@ -47,6 +52,7 @@ void sign_up(const string &email, const string &username,
     }
 
     curl_easy_cleanup(curl);
+    curl_slist_free_all(headers);
   }
 }
 
