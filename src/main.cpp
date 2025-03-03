@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <nlohmann/json.hpp>
+#include <ostream>
 #include <string>
 
 using json = nlohmann::json;
@@ -46,11 +47,6 @@ string post(const string &endpoint, const string &data) {
 
     res = curl_easy_perform(curl);
 
-    if (res != CURLE_OK) {
-      std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res)
-                << std::endl;
-    }
-
     curl_easy_cleanup(curl);
     curl_slist_free_all(headers);
 
@@ -65,12 +61,12 @@ void sign_up(const string &email, const string &username,
 
   string res = post("/auth/register", fields);
 
-  if (res.size() == 0)
-    return;
-
   json data = json::parse(res);
+  string refreshToken;
 
-  string refreshToken = data["refreshToken"];
+  if (data.contains("refreshToken")) {
+    refreshToken = data["refreshToken"];
+  }
 
   cout << refreshToken << endl;
 }
@@ -90,7 +86,7 @@ void auth() {
   string password;
   string confirm_password;
 
-  cout << "        ===== Chess Online =====        " << endl;
+  cout << "============== Chess Online =============" << endl;
   cout << "===== Sign In (1) ===== Sign Up (2) =====" << endl;
   cin >> choice;
 
