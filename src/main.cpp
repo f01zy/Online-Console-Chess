@@ -26,25 +26,23 @@ void sign_up(const string &email, const string &username,
   CURLcode res;
   string readBuffer;
 
+  curl_global_init(CURL_GLOBAL_DEFAULT);
+
   curl = curl_easy_init();
 
   if (curl) {
     string url = API_URL + "/auth/register";
-    json fields;
-
-    fields["email"] = email;
-    fields["username"] = username;
-    fields["password"] = password;
+    string fields =
+        "email=" + email + "&username=" + username + "&password=" + password;
 
     struct curl_slist *headers = NULL;
-    headers = curl_slist_append(headers, "Content-Type: application/json");
-
-    cout << fields.dump().c_str() << endl;
+    headers = curl_slist_append(
+        headers, "Content-Type: application/x-www-form-urlencoded ");
 
     curl_easy_setopt(curl, CURLOPT_POST, 1L);
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, fields.dump().c_str());
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, fields.c_str());
 
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
