@@ -71,7 +71,20 @@ void sign_up(const string &email, const string &username,
   cout << refreshToken << endl;
 }
 
-bool sign_in(const string &username, const string &password) { return false; }
+void sign_in(const string &email, const string &password) {
+  string fields = "email=" + email + "&password=" + password;
+
+  string res = post("/auth/login", fields);
+
+  json data = json::parse(res);
+  string refreshToken;
+
+  if (data.contains("refreshToken")) {
+    refreshToken = data["refreshToken"];
+  }
+
+  cout << refreshToken << endl;
+}
 
 void clear() { system("clear"); }
 
@@ -99,9 +112,7 @@ void auth() {
     cout << "Enter your password: ";
     cin >> password;
 
-    if (sign_in(email, password)) {
-      cout << "Sign in case result" << endl;
-    }
+    sign_in(email, password);
 
     break;
 
