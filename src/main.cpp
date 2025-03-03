@@ -3,8 +3,10 @@
 #include <curl/easy.h>
 #include <fstream>
 #include <iostream>
+#include <nlohmann/json.hpp>
 #include <string>
 
+using json = nlohmann::json;
 using namespace std;
 
 const string API_URL = "http://localhost:3000/api/v1";
@@ -28,16 +30,21 @@ void sign_up(const string &email, const string &username,
 
   if (curl) {
     string url = API_URL + "/auth/register";
-    string fields =
-        "email=" + email + "&username=" + username + "&password=" + password;
+    json fields;
+
+    fields["email"] = email;
+    fields["username"] = username;
+    fields["password"] = password;
 
     struct curl_slist *headers = NULL;
-    headers = curl_slist_append(
-        headers, "Content-Type: application/x-www-form-urlencoded");
+    headers = curl_slist_append(headers, "Content-Type: application/json");
 
+    cout << fields.dump().c_str() << endl;
+
+    curl_easy_setopt(curl, CURLOPT_POST, 1L);
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, fields.c_str());
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, fields.dump().c_str());
 
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
