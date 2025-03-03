@@ -20,8 +20,7 @@ size_t WriteCallback(void *contents, size_t size, size_t nmemb, void *userp) {
   return size * nmemb;
 }
 
-void sign_up(const string &email, const string &username,
-             const string &password) {
+string post(const string &endpoint, const string &data) {
   CURL *curl;
   CURLcode res;
   string readBuffer;
@@ -31,9 +30,7 @@ void sign_up(const string &email, const string &username,
   curl = curl_easy_init();
 
   if (curl) {
-    string url = API_URL + "/auth/register";
-    string fields =
-        "email=" + email + "&username=" + username + "&password=" + password;
+    string url = API_URL + endpoint;
 
     struct curl_slist *headers = NULL;
     headers = curl_slist_append(
@@ -42,7 +39,7 @@ void sign_up(const string &email, const string &username,
     curl_easy_setopt(curl, CURLOPT_POST, 1L);
     curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, fields.c_str());
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
 
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
@@ -52,13 +49,30 @@ void sign_up(const string &email, const string &username,
     if (res != CURLE_OK) {
       std::cerr << "curl_easy_perform() failed: " << curl_easy_strerror(res)
                 << std::endl;
-    } else {
-      std::cout << readBuffer << std::endl;
     }
 
     curl_easy_cleanup(curl);
     curl_slist_free_all(headers);
+
+    return readBuffer;
   }
+}
+
+void sign_up(const string &email, const string &username,
+             const string &password) {
+  string fields =
+      "email=" + email + "&username=" + username + "&password=" + password;
+
+  string res = post("/auth/register", fields);
+
+  if (res.size() == 0)
+    return;
+
+  json data = json::parse(res);
+
+  string refreshToken = data["refreshToken"];
+
+  cout << refreshToken << endl;
 }
 
 bool sign_in(const string &username, const string &password) { return false; }
