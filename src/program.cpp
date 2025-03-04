@@ -1,13 +1,18 @@
 #include "../include/program.h"
 #include "../include/auth.h"
+#include "../include/game.h"
 
 using namespace std;
 
-Auth *auth = new Auth();
+Auth auth;
+Game game;
 
-void Program::render() {
-  bool isAuth = auth->refresh();
+void Program::start() {
+  bool isAuth = auth.refresh();
 
   if (!isAuth)
-    auth->render();
+    auth.render();
+
+  else
+    game.menu();
 }

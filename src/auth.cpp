@@ -11,12 +11,12 @@
 using json = nlohmann::json;
 using namespace std;
 
-Service *service = new Service();
-Http *http = new Http();
+Service service;
+Http http;
 
 void Auth::render(string error) {
   do {
-    service->clear();
+    service.clear();
 
     if (!error.empty()) {
       cout << error << endl;
@@ -33,7 +33,7 @@ void Auth::render(string error) {
     cin >> choice;
 
     if (choice == 1) {
-      service->clear();
+      service.clear();
 
       cout << "Enter your email: ";
       cin >> email;
@@ -111,7 +111,7 @@ bool Auth::sign_up(const string &email, const string &username,
   string fields =
       "email=" + email + "&username=" + username + "&password=" + password;
 
-  string res = http->post("/auth/register", fields);
+  string res = http.post("/auth/register", fields);
 
   json data = json::parse(res);
 
@@ -121,7 +121,7 @@ bool Auth::sign_up(const string &email, const string &username,
 bool Auth::sign_in(const string &email, const string &password) {
   string fields = "email=" + email + "&password=" + password;
 
-  string res = http->post("/auth/login", fields);
+  string res = http.post("/auth/login", fields);
 
   json data = json::parse(res);
 
@@ -154,7 +154,7 @@ bool Auth::refresh() {
   }
 
   string fields = "refreshToken=" + refreshToken;
-  string res = http->post("/auth/refresh", fields);
+  string res = http.post("/auth/refresh", fields);
 
   return this->successRequestCallback(res);
 }

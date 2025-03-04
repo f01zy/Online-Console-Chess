@@ -2,9 +2,9 @@
 
 using namespace std;
 
-Program *program = new Program();
+Program program;
 
 int main() {
-  program->render();
+  program.start();
   return 0;
 }
