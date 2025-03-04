@@ -1,10 +1,10 @@
-#include "../include/program.h"
+#include "../include/game.h"
 
 using namespace std;
 
 int main() {
-  Program program;
+  Game game;
 
-  program.start();
+  game.start();
   return 0;
 }

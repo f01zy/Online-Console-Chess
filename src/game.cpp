@@ -1,4 +1,5 @@
 #include "../include/game.h"
+#include "../include/auth.h"
 #include "../include/service.h"
 
 #include <iostream>
@@ -21,4 +22,17 @@ void Game::menu() {
   cin >> choice;
 
   return;
+}
+
+void Game::start() {
+  Auth auth;
+  Game game;
+
+  bool isAuth = auth.refresh();
+
+  if (!isAuth)
+    auth.render();
+
+  else
+    this->menu();
 }
