@@ -1,6 +1,4 @@
-#ifndef HTTP_H
-#define HTTP_H
-
+#pragma once
 #include <string>
 
 using namespace std;
@@ -11,5 +9,3 @@ public:
                               void *userp);
   string post(const string &endpoint, const string &data);
 };
-
-#endif

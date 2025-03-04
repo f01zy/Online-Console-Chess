@@ -7,10 +7,9 @@
 
 using namespace std;
 
-// Service service;
-
 void Game::menu() {
-  // service.clear();
+  Service service;
+  service.clear();
 
   vector<string> options = {"Online game", "Github", "Exit"};
 

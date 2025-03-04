@@ -1,4 +1,5 @@
 #include "../include/auth.h"
+#include "../include/game.h"
 #include "../include/http.h"
 #include "../include/service.h"
 
@@ -11,10 +12,11 @@
 using json = nlohmann::json;
 using namespace std;
 
-Service service;
-Http http;
-
 void Auth::render(string error) {
+  Service service;
+  Http http;
+  Game game;
+
   do {
     service.clear();
 
@@ -42,7 +44,7 @@ void Auth::render(string error) {
       cin >> password;
 
       if (sign_in(email, password)) {
-        // Вызываем функцию рендера игры.
+        game.menu();
         return;
       }
 
@@ -73,7 +75,7 @@ void Auth::render(string error) {
           bool isAuth = sign_up(email, username, password);
 
           if (isAuth) {
-            // Вызываем функцию рендера игры.
+            game.menu();
             return;
           }
 
@@ -108,6 +110,7 @@ bool Auth::validate_password(const string &password,
 
 bool Auth::sign_up(const string &email, const string &username,
                    const string &password) {
+  Http http;
   string fields =
       "email=" + email + "&username=" + username + "&password=" + password;
 
@@ -119,6 +122,7 @@ bool Auth::sign_up(const string &email, const string &username,
 }
 
 bool Auth::sign_in(const string &email, const string &password) {
+  Http http;
   string fields = "email=" + email + "&password=" + password;
 
   string res = http.post("/auth/login", fields);
@@ -144,6 +148,7 @@ bool Auth::successAuthCallback(json data) {
 }
 
 bool Auth::refresh() {
+  Http http;
   string refreshToken;
 
   ifstream tokenFile("token.txt");

@@ -1,9 +1,6 @@
-#ifndef PROGRAM_H
-#define PROGRAM_H
+#pragma once
 
 class Program {
 public:
   void start();
 };
-
-#endif

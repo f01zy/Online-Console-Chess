@@ -4,10 +4,10 @@
 
 using namespace std;
 
-Auth auth;
-Game game;
-
 void Program::start() {
+  Auth auth;
+  Game game;
+
   bool isAuth = auth.refresh();
 
   if (!isAuth)
