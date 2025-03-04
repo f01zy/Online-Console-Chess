@@ -43,4 +43,6 @@ string Http::post(const string &endpoint, const string &data) {
 
     return readBuffer;
   }
+
+  return "";
 }

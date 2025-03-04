@@ -1,21 +1,10 @@
-#include <fstream>
-#include <string>
-
-#include "../include/auth.h"
+#include "../include/program.h"
 
 using namespace std;
 
-Auth *auth = new Auth();
+Program *program = new Program();
 
 int main() {
-  ifstream tokenFile("token.txt");
-  string token;
-
-  getline(tokenFile, token);
-
-  if (token.empty()) {
-    auth->render();
-  }
-
+  program->render();
   return 0;
 }
