@@ -35,9 +35,8 @@ void Auth::render(string error) {
     cout << "===== Sign In (1) ===== Sign Up (2) =====" << endl;
     cin >> choice;
 
+    service.clear();
     if (choice == 1) {
-      service.clear();
-
       cout << "Enter your email: ";
       cin >> email;
 
@@ -141,7 +140,7 @@ void Auth::writeRefreshToken(const string &token) {
   }
 }
 
-bool Auth::successAuthCallback(json data) {
+bool Auth::successAuthCallback(const json &data) {
   this->writeRefreshToken(data["refreshToken"]);
   this->user = data["user"];
 
@@ -150,14 +149,7 @@ bool Auth::successAuthCallback(json data) {
 
 bool Auth::refresh() {
   Http http;
-  string refreshToken;
-
-  ifstream tokenFile("token.txt");
-
-  if (tokenFile.is_open()) {
-    getline(tokenFile, refreshToken);
-    tokenFile.close();
-  }
+  string refreshToken = this->getRefreshToken();
 
   string fields = "refreshToken=" + refreshToken;
   string res = http.request("/auth/refresh", fields);
@@ -165,7 +157,7 @@ bool Auth::refresh() {
   return this->successRequestCallback(res);
 }
 
-bool Auth::successRequestCallback(string res) {
+bool Auth::successRequestCallback(const string &res) {
   try {
     json data = json::parse(res);
 
@@ -181,9 +173,25 @@ bool Auth::successRequestCallback(string res) {
   }
 }
 
+string Auth::getRefreshToken() {
+  string refreshToken;
+
+  ifstream tokenFile("token.txt");
+
+  if (tokenFile.is_open()) {
+    getline(tokenFile, refreshToken);
+    tokenFile.close();
+  }
+
+  return refreshToken;
+}
+
 void Auth::logout() {
   Http http;
-  http.request("/auth/logout");
+  string refreshToken = this->getRefreshToken();
+
+  string fields = "refreshToken=" + refreshToken;
+  http.request("/auth/logout", fields);
 
   remove("token.txt");
 

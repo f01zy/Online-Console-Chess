@@ -9,10 +9,11 @@ class Auth {
 public:
   json user;
 
+  string getRefreshToken();
   void logout();
-  bool successRequestCallback(string res);
+  bool successRequestCallback(const string &res);
   bool refresh();
-  bool successAuthCallback(json data);
+  bool successAuthCallback(const json &data);
   void render(string error = "");
   void writeRefreshToken(const string &token);
   bool sign_up(const string &email, const string &username,
