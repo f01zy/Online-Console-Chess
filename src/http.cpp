@@ -3,6 +3,7 @@
 
 #include <curl/curl.h>
 #include <curl/easy.h>
+#include <string>
 
 using namespace std;
 
@@ -12,7 +13,7 @@ size_t Http::WriteCallback(void *contents, size_t size, size_t nmemb,
   return size * nmemb;
 }
 
-string Http::post(const string &endpoint, const string &data) {
+string Http::request(const string &endpoint, const string &data) {
   CURL *curl;
   CURLcode res;
   string readBuffer;
@@ -24,12 +25,15 @@ string Http::post(const string &endpoint, const string &data) {
   if (curl) {
     string url = API_URL + endpoint;
 
-    struct curl_slist *headers = NULL;
-    headers = curl_slist_append(
-        headers, "Content-Type: application/x-www-form-urlencoded ");
+    if (data.size() > 0) {
+      struct curl_slist *headers = NULL;
+      headers = curl_slist_append(
+          headers, "Content-Type: application/x-www-form-urlencoded ");
 
-    curl_easy_setopt(curl, CURLOPT_POST, 1L);
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+      curl_easy_setopt(curl, CURLOPT_POST, 1L);
+      curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    }
+
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, data.c_str());
 
@@ -39,7 +43,6 @@ string Http::post(const string &endpoint, const string &data) {
     res = curl_easy_perform(curl);
 
     curl_easy_cleanup(curl);
-    curl_slist_free_all(headers);
 
     return readBuffer;
   }

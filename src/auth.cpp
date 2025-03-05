@@ -3,6 +3,7 @@
 #include "../include/http.h"
 #include "../include/service.h"
 
+#include <cstdio>
 #include <curl/curl.h>
 #include <fstream>
 #include <iostream>
@@ -114,7 +115,7 @@ bool Auth::sign_up(const string &email, const string &username,
   string fields =
       "email=" + email + "&username=" + username + "&password=" + password;
 
-  string res = http.post("/auth/register", fields);
+  string res = http.request("/auth/register", fields);
 
   json data = json::parse(res);
 
@@ -125,7 +126,7 @@ bool Auth::sign_in(const string &email, const string &password) {
   Http http;
   string fields = "email=" + email + "&password=" + password;
 
-  string res = http.post("/auth/login", fields);
+  string res = http.request("/auth/login", fields);
 
   json data = json::parse(res);
 
@@ -159,7 +160,7 @@ bool Auth::refresh() {
   }
 
   string fields = "refreshToken=" + refreshToken;
-  string res = http.post("/auth/refresh", fields);
+  string res = http.request("/auth/refresh", fields);
 
   return this->successRequestCallback(res);
 }
@@ -178,4 +179,13 @@ bool Auth::successRequestCallback(string res) {
     cout << "JSON parse error: " << e.what() << endl;
     return false;
   }
+}
+
+void Auth::logout() {
+  Http http;
+  http.request("/auth/logout");
+
+  remove("token.txt");
+
+  this->render();
 }

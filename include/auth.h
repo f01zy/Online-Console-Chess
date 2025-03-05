@@ -9,6 +9,7 @@ class Auth {
 public:
   json user;
 
+  void logout();
   bool successRequestCallback(string res);
   bool refresh();
   bool successAuthCallback(json data);
