@@ -5,4 +5,5 @@ public:
   void menu();
   void start();
   void searchOpponent();
+  void waiting();
 };

@@ -1,11 +1,19 @@
 #include "../include/socket.h"
+#include "../include/service.h"
+
 #include <functional>
 #include <sio_socket.h>
 
 using namespace std;
 using namespace sio;
 
-Socket::Socket(string url) { c.connect(url); }
+Socket::Socket(string url) {
+  Service service;
+
+  service.sleep(1);
+  c.set_logs_quiet();
+  c.connect(url);
+}
 
 Socket::~Socket() { c.socket()->close(); }
 

@@ -26,6 +26,9 @@ void Game::menu() {
   }
 
   short choice;
+
+  cout << endl;
+  cout << "Your choice: ";
   cin >> choice;
 
   char chessboard[boardHeight][boardWidth] = {
@@ -72,10 +75,35 @@ void Game::start() {
     this->menu();
 }
 
+void Game::waiting() {
+  Service service;
+  short state = 1;
+  char waitChar = '.';
+
+  while (1) {
+    service.clear();
+
+    string wait = "";
+
+    for (short i = 0; i < state; i++)
+      wait += waitChar;
+
+    if (state == 3)
+      state = 1;
+    else
+      state++;
+
+    cout << "Waiting" << wait << endl;
+
+    service.sleep(1);
+  }
+}
+
 void Game::searchOpponent() {
   Socket &socket = Socket::getInstance(SERVER_URL);
 
-  string userId = Auth::user["id"];
+  string username = Auth::user["username"];
+  socket.send("searchOpponent", username);
 
-  socket.send("searchOpponent", userId);
+  this->waiting();
 }
