@@ -11,15 +11,13 @@ public:
   json user;
 
   string getRefreshToken();
-  void logout();
-  bool successRequestCallback(const string &res);
   bool refresh();
-  bool successAuthCallback(const json &data);
+  void logout();
   void render(string error = "");
-  void writeRefreshToken(const string &token);
-  bool sign_up(const string &email, const string &username,
-               const string &password);
-  bool sign_in(const string &email, const string &password);
-  bool validate_password(const string &password,
-                         const string &confirm_password);
+  bool successRequestCallback(string res);
+  bool successAuthCallback(json data);
+  void writeRefreshToken(string token);
+  bool sign_up(string email, string username, string password);
+  bool sign_in(string email, string password);
+  bool validate_password(string password, string confirm_password);
 };

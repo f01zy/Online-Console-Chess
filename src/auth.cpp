@@ -25,7 +25,7 @@ void Auth::render(string error) {
       cout << error << endl;
     }
 
-    int choice;
+    short choice;
     string email;
     string username;
     string password;
@@ -55,7 +55,7 @@ void Auth::render(string error) {
 
     else if (choice == 2) {
       bool passwords_match = false;
-      int attempts = 3;
+      short attempts = 3;
 
       cout << "Change email: ";
       cin >> email;
@@ -103,13 +103,11 @@ void Auth::render(string error) {
   curl_global_cleanup();
 }
 
-bool Auth::validate_password(const string &password,
-                             const string &confirm_password) {
+bool Auth::validate_password(string password, string confirm_password) {
   return password == confirm_password;
 }
 
-bool Auth::sign_up(const string &email, const string &username,
-                   const string &password) {
+bool Auth::sign_up(string email, string username, string password) {
   Http http;
   string fields =
       "email=" + email + "&username=" + username + "&password=" + password;
@@ -121,7 +119,7 @@ bool Auth::sign_up(const string &email, const string &username,
   return this->successRequestCallback(res);
 }
 
-bool Auth::sign_in(const string &email, const string &password) {
+bool Auth::sign_in(string email, string password) {
   Http http;
   string fields = "email=" + email + "&password=" + password;
 
@@ -132,7 +130,7 @@ bool Auth::sign_in(const string &email, const string &password) {
   return this->successRequestCallback(res);
 }
 
-void Auth::writeRefreshToken(const string &token) {
+void Auth::writeRefreshToken(string token) {
   ofstream tokenFile("token.txt");
 
   if (tokenFile) {
@@ -140,7 +138,7 @@ void Auth::writeRefreshToken(const string &token) {
   }
 }
 
-bool Auth::successAuthCallback(const json &data) {
+bool Auth::successAuthCallback(json data) {
   this->writeRefreshToken(data["refreshToken"]);
   this->user = data["user"];
 
@@ -157,7 +155,7 @@ bool Auth::refresh() {
   return this->successRequestCallback(res);
 }
 
-bool Auth::successRequestCallback(const string &res) {
+bool Auth::successRequestCallback(string res) {
   try {
     json data = json::parse(res);
 

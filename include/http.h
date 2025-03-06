@@ -8,5 +8,5 @@ public:
   static size_t WriteCallback(void *contents, size_t size, size_t nmemb,
                               void *userp);
 
-  string request(const string &endpoint, const string &data = "");
+  string request(string endpoint, string data = "");
 };

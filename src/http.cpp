@@ -13,7 +13,7 @@ size_t Http::WriteCallback(void *contents, size_t size, size_t nmemb,
   return size * nmemb;
 }
 
-string Http::request(const string &endpoint, const string &data) {
+string Http::request(string endpoint, string data) {
   CURL *curl;
   CURLcode res;
   string readBuffer;
