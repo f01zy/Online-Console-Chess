@@ -16,4 +16,8 @@ void Board::render(char board[boardHeight][boardWidth]) {
     }
     cout << endl;
   }
+
+  while (1) {
+    service.sleep(1);
+  }
 }

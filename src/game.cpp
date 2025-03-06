@@ -12,10 +12,11 @@
 
 using namespace std;
 
+string Game::opponent = "";
+
 void Game::menu() {
   Service service;
   Auth auth;
-  Board board;
 
   service.clear();
 
@@ -30,17 +31,6 @@ void Game::menu() {
   cout << endl;
   cout << "Your choice: ";
   cin >> choice;
-
-  char chessboard[boardHeight][boardWidth] = {
-      {'.', '.', '.', '.', '.', '.', '.', '.'},
-      {'.', '.', '.', '.', '.', '.', '.', '.'},
-      {'.', '.', '.', '.', '.', '.', '.', '.'},
-      {'.', '.', '.', '.', '.', '.', '.', '.'},
-      {'.', '.', '.', '.', '.', '.', '.', '.'},
-      {'.', '.', '.', '.', '.', '.', '.', '.'},
-      {'.', '.', '.', '.', '.', '.', '.', '.'},
-      {'.', '.', '.', '.', '.', '.', '.', '.'},
-  };
 
   switch (choice) {
   case 1:
@@ -75,14 +65,34 @@ void Game::start() {
     this->menu();
 }
 
+void Game::chess() {
+  Board board;
+
+  char chessboard[boardHeight][boardWidth] = {
+      {'/', '?', '*', '#', '!', '*', '?', '/'},
+      {'.', '.', '.', '.', '.', '.', '.', '.'},
+      {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+      {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+      {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+      {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+      {'.', '.', '.', '.', '.', '.', '.', '.'},
+      {'/', '?', '*', '#', '!', '*', '?', '/'},
+  };
+
+  board.render(chessboard);
+}
+
 void Game::waiting() {
   Service service;
+
   short state = 1;
   char waitChar = '.';
+  short i = 0;
 
-  while (1) {
+  while (this->opponent.size() == 0) {
     service.clear();
-
+    Socket &socket = Socket::getInstance(SERVER_URL);
+    string username = Auth::user["username"];
     string wait = "";
 
     for (short i = 0; i < state; i++)
@@ -93,10 +103,18 @@ void Game::waiting() {
     else
       state++;
 
+    i++;
+    if (i == 5) {
+      socket.send("searchOpponent", username);
+      i = 0;
+    }
+
     cout << "Waiting" << wait << endl;
 
     service.sleep(1);
   }
+
+  this->chess();
 }
 
 void Game::searchOpponent() {

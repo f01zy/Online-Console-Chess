@@ -1,4 +1,5 @@
 #include "../include/socket.h"
+#include "../include/game.h"
 #include "../include/service.h"
 
 #include <functional>
@@ -7,8 +8,16 @@
 using namespace std;
 using namespace sio;
 
+void startGame(sio::event &event) {
+  string data = event.get_message()->get_string();
+  Game::opponent = data;
+}
+
 Socket::Socket(string url) {
   Service service;
+  Game game;
+
+  this->on("startGame", startGame);
 
   service.sleep(1);
   c.set_logs_quiet();
