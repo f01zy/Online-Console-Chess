@@ -8,9 +8,10 @@ class Game {
 public:
   static string opponent;
 
-  void chess();
+  void initialization();
   void menu();
   void start();
   void searchOpponent();
   void waiting();
+  void readyToGame();
 };

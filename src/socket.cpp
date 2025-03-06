@@ -10,7 +10,7 @@
 using namespace std;
 using namespace sio;
 
-void startGame(sio::event &event) {
+void findOpponent(sio::event &event) {
   auto data = event.get_message()->get_vector();
   string first = data[0]->get_string();
   string second = data[1]->get_string();
@@ -26,7 +26,7 @@ void startGame(sio::event &event) {
 Socket::Socket(string url) {
   Service service;
 
-  this->on("startGame", startGame);
+  this->on("findOpponent", findOpponent);
 
   service.sleep(1);
   c.set_logs_quiet();

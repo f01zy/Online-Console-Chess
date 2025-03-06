@@ -65,7 +65,7 @@ void Game::start() {
     this->menu();
 }
 
-void Game::chess() {
+void Game::initialization() {
   Board board;
 
   char chessboard[boardHeight][boardWidth] = {
@@ -105,6 +105,7 @@ void Game::waiting() {
 
     i++;
     if (i == 5) {
+      i = 0;
       socket.send("searchOpponent", username);
     }
 
@@ -113,7 +114,7 @@ void Game::waiting() {
     service.sleep(1);
   }
 
-  this->chess();
+  this->initialization();
 }
 
 void Game::searchOpponent() {
