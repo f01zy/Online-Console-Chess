@@ -1,4 +1,5 @@
 #include "../include/board.h"
+#include "../include/game.h"
 #include "../include/globals.h"
 #include "../include/service.h"
 

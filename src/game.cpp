@@ -106,7 +106,6 @@ void Game::waiting() {
     i++;
     if (i == 5) {
       socket.send("searchOpponent", username);
-      i = 0;
     }
 
     cout << "Waiting" << wait << endl;
