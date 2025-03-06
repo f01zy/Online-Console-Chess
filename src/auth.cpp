@@ -13,6 +13,8 @@
 using json = nlohmann::json;
 using namespace std;
 
+json Auth::user = json::object();
+
 void Auth::render(string error) {
   Service service;
   Http http;

@@ -8,7 +8,7 @@ using namespace std;
 
 class Auth {
 public:
-  json user;
+  static json user;
 
   string getRefreshToken();
   bool refresh();

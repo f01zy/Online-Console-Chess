@@ -3,6 +3,7 @@
 #include "../include/board.h"
 #include "../include/globals.h"
 #include "../include/service.h"
+#include "../include/socket.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -40,7 +41,7 @@ void Game::menu() {
 
   switch (choice) {
   case 1:
-    board.render(chessboard);
+    this->searchOpponent();
     break;
 
   case 3:
@@ -69,4 +70,12 @@ void Game::start() {
 
   else
     this->menu();
+}
+
+void Game::searchOpponent() {
+  Socket &socket = Socket::getInstance(SERVER_URL);
+
+  string userId = Auth::user["id"];
+
+  socket.send("searchOpponent", userId);
 }
