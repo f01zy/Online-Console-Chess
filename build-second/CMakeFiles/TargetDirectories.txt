@@ -1,3 +1,0 @@
-/home/folzy/Documents/programming/projects/chess/client/build-second/CMakeFiles/start.dir
-/home/folzy/Documents/programming/projects/chess/client/build-second/CMakeFiles/edit_cache.dir
-/home/folzy/Documents/programming/projects/chess/client/build-second/CMakeFiles/rebuild_cache.dir
