@@ -1,5 +1,4 @@
 #include "../include/board.h"
-#include "../include/game.h"
 #include "../include/globals.h"
 #include "../include/service.h"
 
@@ -16,9 +15,5 @@ void Board::render(char board[boardHeight][boardWidth]) {
       cout << board[i][j] << " ";
     }
     cout << endl;
-  }
-
-  while (1) {
-    service.sleep(1);
   }
 }

@@ -13,6 +13,8 @@
 using namespace std;
 
 string Game::opponent = "";
+string Game::color = "";
+bool Game::isYourMove = false;
 
 void Game::menu() {
   Service service;
@@ -65,21 +67,48 @@ void Game::start() {
     this->menu();
 }
 
-void Game::initialization() {
+void Game::play() {
   Board board;
+  Service service;
 
-  char chessboard[boardHeight][boardWidth] = {
-      {'/', '?', '*', '#', '!', '*', '?', '/'},
-      {'.', '.', '.', '.', '.', '.', '.', '.'},
-      {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-      {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-      {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-      {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-      {'.', '.', '.', '.', '.', '.', '.', '.'},
-      {'/', '?', '*', '#', '!', '*', '?', '/'},
-  };
+  while (1) {
+    service.clear();
 
-  board.render(chessboard);
+    char chessboard[boardHeight][boardWidth] = {
+        {'/', '?', '*', '#', '!', '*', '?', '/'},
+        {'.', '.', '.', '.', '.', '.', '.', '.'},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+        {'.', '.', '.', '.', '.', '.', '.', '.'},
+        {'/', '?', '*', '#', '!', '*', '?', '/'},
+    };
+
+    board.render(chessboard);
+
+    if (this->isYourMove)
+      this->move();
+
+    service.sleep(1);
+  }
+}
+
+void Game::move() {
+  Socket &socket = Socket::getInstance(SERVER_URL);
+
+  string username = Auth::user["username"];
+
+  cout << endl;
+  cout << "Coordinates: ";
+
+  string coordinates;
+  cin >> coordinates;
+
+  Game::isYourMove = false;
+
+  string data = username + " " + coordinates;
+  socket.send("move", data);
 }
 
 void Game::waiting() {
@@ -114,7 +143,7 @@ void Game::waiting() {
     service.sleep(1);
   }
 
-  this->initialization();
+  this->play();
 }
 
 void Game::searchOpponent() {

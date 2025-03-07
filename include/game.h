@@ -7,8 +7,11 @@ using namespace std;
 class Game {
 public:
   static string opponent;
+  static string color;
+  static bool isYourMove;
 
-  void initialization();
+  void move();
+  void play();
   void menu();
   void start();
   void searchOpponent();
