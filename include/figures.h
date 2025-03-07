@@ -11,7 +11,8 @@ public:
   static unordered_map<string, function<bool()>> validateFunctions;
 
   vector<string> getCoordinates(string coordinates);
-  bool validate(string coordinates);
+  bool validateMove(string coordinates);
+  bool validateCoordinates(string coordinates);
   static bool pawn();
   static bool king();
   static bool queen();

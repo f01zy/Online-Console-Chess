@@ -31,11 +31,8 @@ void Game::menu() {
     cout << options[i] << " (" << i + 1 << ")" << endl;
   }
 
-  short choice;
-
   cout << endl;
-  cout << "Your choice: ";
-  cin >> choice;
+  short choice = service.getNumber("Your choice: ");
 
   switch (choice) {
   case 1:
@@ -129,6 +126,8 @@ void Game::initChessboard() {
 void Game::move() {
   Socket &socket = Socket::getInstance(SERVER_URL);
   Figures figures;
+  Board board;
+  Service service;
 
   string username = Auth::user["username"];
 
@@ -138,8 +137,11 @@ void Game::move() {
   string coordinates;
   cin >> coordinates;
 
-  if (!figures.validate(coordinates))
-    return;
+  if (!figures.validateMove(coordinates)) {
+    service.clear();
+    board.render(this->chessboard);
+    this->move();
+  }
 
   Game::isYourMove = false;
 
@@ -152,7 +154,6 @@ void Game::waiting() {
 
   short state = 1;
   char waitChar = '.';
-  short i = 0;
 
   while (this->opponent.size() == 0) {
     service.clear();
@@ -167,12 +168,6 @@ void Game::waiting() {
       state = 1;
     else
       state++;
-
-    i++;
-    if (i == 5) {
-      i = 0;
-      socket.send("searchOpponent", username);
-    }
 
     cout << "Waiting" << wait << endl;
 
