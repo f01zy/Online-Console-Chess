@@ -3,10 +3,11 @@
 #include "../include/service.h"
 
 #include <iostream>
+#include <string>
 
 using namespace std;
 
-void Board::render(char board[boardHeight][boardWidth]) {
+void Board::render(string board[boardHeight][boardWidth]) {
   Service service;
   service.clear();
 

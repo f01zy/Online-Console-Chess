@@ -1,6 +1,7 @@
 #include "../include/game.h"
 #include "../include/auth.h"
 #include "../include/board.h"
+#include "../include/figures.h"
 #include "../include/globals.h"
 #include "../include/service.h"
 #include "../include/socket.h"
@@ -8,6 +9,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 using namespace std;
@@ -15,6 +17,7 @@ using namespace std;
 string Game::opponent = "";
 string Game::color = "";
 bool Game::isYourMove = false;
+string Game::chessboard[boardHeight][boardWidth] = {};
 
 void Game::menu() {
   Service service;
@@ -71,21 +74,12 @@ void Game::play() {
   Board board;
   Service service;
 
+  this->initChessboard();
+
   while (1) {
     service.clear();
 
-    char chessboard[boardHeight][boardWidth] = {
-        {'/', '?', '*', '#', '!', '*', '?', '/'},
-        {'.', '.', '.', '.', '.', '.', '.', '.'},
-        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-        {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-        {'.', '.', '.', '.', '.', '.', '.', '.'},
-        {'/', '?', '*', '#', '!', '*', '?', '/'},
-    };
-
-    board.render(chessboard);
+    board.render(this->chessboard);
 
     if (this->isYourMove)
       this->move();
@@ -94,8 +88,68 @@ void Game::play() {
   }
 }
 
+void Game::initChessboard() {
+  unordered_map<string, vector<string>> figures = {
+      {"black",
+       {"b/", "b?", "b*", "b#", "b!", "b*", "b?", "b/", "b.", "b.", "b.", "b.",
+        "b.", "b.", "b.", "b."}},
+
+      {"white",
+       {"w/", "w?", "w*", "w!", "w#", "w*", "w?", "w/", "w.", "w.", "w.", "w.",
+        "w.", "w.", "w.", "w."}}};
+
+  bool isWhiteOnBottom = (color == "white");
+
+  for (short i = 0; i < boardHeight; i++) {
+    for (short j = 0; j < boardWidth; j++) {
+      if (isWhiteOnBottom) {
+        if (i == 0) {
+          chessboard[i][j] = figures["white"][j];
+        }
+
+        else if (i == 1) {
+          chessboard[i][j] = figures["white"][j + 8];
+        }
+
+        else if (i == 6) {
+          chessboard[i][j] = figures["black"][j + 8];
+        }
+
+        else if (i == 7) {
+          chessboard[i][j] = figures["black"][j];
+        }
+
+        else {
+          chessboard[i][j] = " ";
+        }
+      } else {
+        if (i == 0) {
+          chessboard[i][j] = figures["black"][j];
+        }
+
+        else if (i == 1) {
+          chessboard[i][j] = figures["black"][j + 8];
+        }
+
+        else if (i == 6) {
+          chessboard[i][j] = figures["white"][j + 8];
+        }
+
+        else if (i == 7) {
+          chessboard[i][j] = figures["white"][j];
+        }
+
+        else {
+          chessboard[i][j] = " ";
+        }
+      }
+    }
+  }
+}
+
 void Game::move() {
   Socket &socket = Socket::getInstance(SERVER_URL);
+  Figures figures;
 
   string username = Auth::user["username"];
 
@@ -104,6 +158,9 @@ void Game::move() {
 
   string coordinates;
   cin >> coordinates;
+
+  if (!figures.validate(coordinates))
+    return;
 
   Game::isYourMove = false;
 
