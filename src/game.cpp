@@ -93,55 +93,34 @@ void Game::initChessboard() {
       {"black",
        {"b/", "b?", "b*", "b#", "b!", "b*", "b?", "b/", "b.", "b.", "b.", "b.",
         "b.", "b.", "b.", "b."}},
-
       {"white",
        {"w/", "w?", "w*", "w!", "w#", "w*", "w?", "w/", "w.", "w.", "w.", "w.",
         "w.", "w.", "w.", "w."}}};
 
   bool isWhiteOnBottom = (color == "white");
+  const string &playerColor = isWhiteOnBottom ? "white" : "black";
+  const string &opponentColor = isWhiteOnBottom ? "black" : "white";
 
   for (short i = 0; i < boardHeight; i++) {
     for (short j = 0; j < boardWidth; j++) {
-      if (isWhiteOnBottom) {
-        if (i == 0) {
-          chessboard[i][j] = figures["white"][j];
-        }
+      if (i == 0) {
+        chessboard[i][j] = figures[playerColor][j];
+      }
 
-        else if (i == 1) {
-          chessboard[i][j] = figures["white"][j + 8];
-        }
+      else if (i == 1) {
+        chessboard[i][j] = figures[playerColor][j + 8];
+      }
 
-        else if (i == 6) {
-          chessboard[i][j] = figures["black"][j + 8];
-        }
+      else if (i == 6) {
+        chessboard[i][j] = figures[opponentColor][j + 8];
+      }
 
-        else if (i == 7) {
-          chessboard[i][j] = figures["black"][j];
-        }
+      else if (i == 7) {
+        chessboard[i][j] = figures[opponentColor][j];
+      }
 
-        else {
-          chessboard[i][j] = " ";
-        }
-      } else {
-        if (i == 0) {
-          chessboard[i][j] = figures["black"][j];
-        }
-
-        else if (i == 1) {
-          chessboard[i][j] = figures["black"][j + 8];
-        }
-
-        else if (i == 6) {
-          chessboard[i][j] = figures["white"][j + 8];
-        }
-
-        else if (i == 7) {
-          chessboard[i][j] = figures["white"][j];
-        }
-
-        else {
-          chessboard[i][j] = " ";
-        }
+      else {
+        chessboard[i][j] = " ";
       }
     }
   }
