@@ -94,31 +94,16 @@ void Game::initChessboard() {
        {"w/", "w?", "w*", "w!", "w#", "w*", "w?", "w/", "w.", "w.", "w.", "w.",
         "w.", "w.", "w.", "w."}}};
 
-  bool isWhiteOnBottom = (color == "white");
-  const string &playerColor = isWhiteOnBottom ? "white" : "black";
-  const string &opponentColor = isWhiteOnBottom ? "black" : "white";
+  for (short j = 0; j < boardWidth; j++) {
+    this->chessboard[7][j] = figures["white"][j];
+    this->chessboard[6][j] = figures["white"][j + 8];
+    this->chessboard[1][j] = figures["black"][j + 8];
+    this->chessboard[0][j] = figures["black"][j];
+  }
 
-  for (short i = 0; i < boardHeight; i++) {
+  for (short i = 2; i < 6; i++) {
     for (short j = 0; j < boardWidth; j++) {
-      if (i == 0) {
-        chessboard[i][j] = figures[playerColor][j];
-      }
-
-      else if (i == 1) {
-        chessboard[i][j] = figures[playerColor][j + 8];
-      }
-
-      else if (i == 6) {
-        chessboard[i][j] = figures[opponentColor][j + 8];
-      }
-
-      else if (i == 7) {
-        chessboard[i][j] = figures[opponentColor][j];
-      }
-
-      else {
-        chessboard[i][j] = " ";
-      }
+      this->chessboard[i][j] = " ";
     }
   }
 }

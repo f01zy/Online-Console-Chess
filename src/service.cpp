@@ -27,14 +27,13 @@ short Service::getNumber(string message) {
   short result;
 
   while (true) {
-    cout << message << endl;
+    cout << message;
 
     cin >> result;
 
     if (cin.fail()) {
       cin.clear();
       cin.ignore(numeric_limits<streamsize>::max(), '\n');
-
     }
 
     else {
