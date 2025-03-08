@@ -76,7 +76,7 @@ void Game::play() {
   while (1) {
     service.clear();
 
-    board.render(this->chessboard);
+    board.render();
 
     if (this->isYourMove)
       this->move();
@@ -88,11 +88,12 @@ void Game::play() {
 void Game::initChessboard() {
   unordered_map<string, vector<string>> figures = {
       {"black",
-       {"b/", "b?", "b*", "b#", "b!", "b*", "b?", "b/", "b.", "b.", "b.", "b.",
-        "b.", "b.", "b.", "b."}},
+       {"bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR", "bP", "bP", "bP", "bP",
+        "bP", "bP", "bP", "bP"}},
+
       {"white",
-       {"w/", "w?", "w*", "w!", "w#", "w*", "w?", "w/", "w.", "w.", "w.", "w.",
-        "w.", "w.", "w.", "w."}}};
+       {"wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR", "wP", "wP", "wP", "wP",
+        "wP", "wP", "wP", "wP"}}};
 
   for (short j = 0; j < boardWidth; j++) {
     this->chessboard[7][j] = figures["white"][j];
@@ -124,9 +125,11 @@ void Game::move() {
 
   if (!figures.validateMove(coordinates)) {
     service.clear();
-    board.render(this->chessboard);
+    board.render("Dont valid coordinates.");
     this->move();
   }
+
+  board.move(coordinates);
 
   Game::isYourMove = false;
 

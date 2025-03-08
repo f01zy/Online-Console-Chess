@@ -1,4 +1,5 @@
 #include "../include/board.h"
+#include "../include/figures.h"
 #include "../include/game.h"
 #include "../include/globals.h"
 #include "../include/service.h"
@@ -9,9 +10,14 @@
 
 using namespace std;
 
-void Board::render(string board[boardHeight][boardWidth]) {
+void Board::render(string error) {
   Service service;
   service.clear();
+
+  if (error.size() > 0) {
+    cout << error << endl;
+    cout << endl;
+  }
 
   vector<char> letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
@@ -29,11 +35,11 @@ void Board::render(string board[boardHeight][boardWidth]) {
 
     for (short j = 0; j < boardWidth; j++) {
       if (Game::color == "black") {
-        cout << board[boardHeight - i - 1][j] << " ";
+        cout << Game::chessboard[boardHeight - i - 1][j] << " ";
       }
 
       else {
-        cout << board[i][j] << " ";
+        cout << Game::chessboard[i][j] << " ";
       }
     }
     cout << endl;
@@ -52,4 +58,17 @@ void Board::render(string board[boardHeight][boardWidth]) {
     cout << "  " << letters[index];
   }
   cout << endl;
+}
+
+void Board::move(string c) {
+  Figures figures;
+  vector coordinates = figures.getCoordinates(c);
+
+  if (coordinates.size() == 0)
+    return;
+
+  string figure = Game::chessboard[coordinates[1]][coordinates[0]];
+
+  Game::chessboard[coordinates[1]][coordinates[0]] = "  ";
+  Game::chessboard[coordinates[3]][coordinates[2]] = figure;
 }

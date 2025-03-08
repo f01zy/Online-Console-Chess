@@ -13,8 +13,8 @@
 using namespace std;
 
 unordered_map<string, function<bool()>> Figures::validateFunctions = {
-    {".", Figures::pawn}, {"!", Figures::king},     {"#", Figures::queen},
-    {"/", Figures::rook}, {"*", Figures::elephant}, {"?", Figures::horse}};
+    {"P", Figures::pawn}, {"K", Figures::king},     {"Q", Figures::queen},
+    {"R", Figures::rook}, {"B", Figures::elephant}, {"N", Figures::horse}};
 
 vector<short> Figures::getCoordinates(string coordinates) {
   Service service;
@@ -49,11 +49,8 @@ vector<short> Figures::getCoordinates(string coordinates) {
   short toY = boardHeight - toYStoi;
 
   if (Game::color == "black") {
-    if (from[0] == 'e' || from[0] == 'd')
-      fromX--;
-
-    if (to[0] == 'e' || to[0] == 'd')
-      toX--;
+    fromX = 7 - fromX;
+    toX = 7 - toX;
   }
 
   return {fromX, fromY, toX, toY};

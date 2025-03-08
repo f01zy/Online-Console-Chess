@@ -8,5 +8,6 @@ using namespace std;
 
 class Board {
 public:
-  void render(string board[boardHeight][boardWidth]);
+  void render(string error = "");
+  void move(string c);
 };

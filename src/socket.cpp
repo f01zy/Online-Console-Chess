@@ -1,5 +1,6 @@
 #include "../include/socket.h"
 #include "../include/auth.h"
+#include "../include/board.h"
 #include "../include/game.h"
 #include "../include/service.h"
 
@@ -40,11 +41,14 @@ void findOpponent(sio::event &event) {
 }
 
 void moveEvent(sio::event &event) {
+  Board board;
+
   auto data = event.get_message()->get_vector();
   string username = data[0]->get_string();
   string move = data[1]->get_string();
 
   if (Game::opponent == username) {
+    board.move(move);
     Game::isYourMove = true;
   }
 }
