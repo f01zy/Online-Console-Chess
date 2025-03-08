@@ -6,6 +6,7 @@ using namespace std;
 
 class Service {
 public:
+  string charToString(char symbol);
   short getAlphabetIndex(char letter);
   void clear();
   void sleep(short seconds);

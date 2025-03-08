@@ -13,6 +13,11 @@ void Service::sleep(short seconds) {
   this_thread::sleep_for(chrono::seconds(1));
 }
 
+string Service::charToString(char symbol) {
+  string temp(1, symbol);
+  return temp;
+}
+
 short Service::getAlphabetIndex(char letter) {
   letter = tolower(letter);
 

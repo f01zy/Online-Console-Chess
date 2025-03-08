@@ -5,6 +5,7 @@
 #include <cctype>
 #include <functional>
 #include <iostream>
+#include <stdexcept>
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -24,8 +25,38 @@ vector<short> Figures::getCoordinates(string coordinates) {
   string from = coordinates.substr(0, coordinates.find("-"));
   string to = coordinates.substr(coordinates.find("-") + 1, coordinates.size());
 
-  return vector<short>{service.getAlphabetIndex(tolower(from[0])), from[1],
-                       service.getAlphabetIndex(tolower(to[0])), to[1]};
+  short fromYStoi;
+  short toYStoi;
+
+  try {
+    fromYStoi = stoi(service.charToString(from[1]));
+    toYStoi = stoi(service.charToString(to[1]));
+
+    if (fromYStoi < 0 || fromYStoi > boardHeight)
+      throw invalid_argument("");
+
+    if (toYStoi < 0 || toYStoi > boardHeight)
+      throw invalid_argument("");
+  }
+
+  catch (invalid_argument &err) {
+    return {};
+  }
+
+  short fromX = service.getAlphabetIndex(from[0]);
+  short fromY = boardHeight - fromYStoi;
+  short toX = service.getAlphabetIndex(to[0]);
+  short toY = boardHeight - toYStoi;
+
+  if (Game::color == "black") {
+    if (from[0] == 'e' || from[0] == 'd')
+      fromX--;
+
+    if (to[0] == 'e' || to[0] == 'd')
+      toX--;
+  }
+
+  return {fromX, fromY, toX, toY};
 }
 
 bool Figures::isLetter(char letter) { return std::isalpha(letter); }
@@ -53,7 +84,11 @@ bool Figures::validateMove(string c) {
   if (coordinates.size() == 0)
     return false;
 
-  string figure(1, Game::chessboard[coordinates[0]][coordinates[1]][1]);
+  string chessboardFigure = Game::chessboard[coordinates[1]][coordinates[0]];
+  string figure(1, chessboardFigure[1]);
+
+  cout << "figure: " << chessboardFigure << endl;
+  service.sleep(1);
 
   if (this->baseMoveValidation(coordinates) &&
       this->validateFunctions[figure]())
