@@ -9,7 +9,6 @@
 #include <cstdlib>
 #include <iostream>
 #include <string>
-#include <unordered_map>
 #include <vector>
 
 using namespace std;
@@ -86,27 +85,20 @@ void Game::play() {
 }
 
 void Game::initChessboard() {
-  unordered_map<string, vector<string>> figures = {
-      {"black",
-       {"bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR", "bP", "bP", "bP", "bP",
-        "bP", "bP", "bP", "bP"}},
+  string board[boardHeight][boardWidth] = {
+      {"bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"},
+      {"bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"},
+      {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+      {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+      {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+      {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
+      {"wP", "wP", "wP", "wP", "wP", "wP", "wP", "wP"},
+      {"wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"},
+  };
 
-      {"white",
-       {"wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR", "wP", "wP", "wP", "wP",
-        "wP", "wP", "wP", "wP"}}};
-
-  for (short j = 0; j < boardWidth; j++) {
-    this->chessboard[7][j] = figures["white"][j];
-    this->chessboard[6][j] = figures["white"][j + 8];
-    this->chessboard[1][j] = figures["black"][j + 8];
-    this->chessboard[0][j] = figures["black"][j];
-  }
-
-  for (short i = 2; i < 6; i++) {
-    for (short j = 0; j < boardWidth; j++) {
-      this->chessboard[i][j] = " ";
-    }
-  }
+  for (short i = 0; i < boardHeight; i++)
+    for (short j = 0; j < boardWidth; j++)
+      this->chessboard[i][j] = board[i][j];
 }
 
 void Game::move() {

@@ -48,11 +48,6 @@ vector<short> Figures::getCoordinates(string coordinates) {
   short toX = service.getAlphabetIndex(to[0]);
   short toY = boardHeight - toYStoi;
 
-  if (Game::color == "black") {
-    fromX = 7 - fromX;
-    toX = 7 - toX;
-  }
-
   return {fromX, fromY, toX, toY};
 }
 
@@ -81,11 +76,7 @@ bool Figures::validateMove(string c) {
   if (coordinates.size() == 0)
     return false;
 
-  string chessboardFigure = Game::chessboard[coordinates[1]][coordinates[0]];
-  string figure(1, chessboardFigure[1]);
-
-  cout << "figure: " << chessboardFigure << endl;
-  service.sleep(1);
+  string figure(1, Game::chessboard[coordinates[1]][coordinates[0]][1]);
 
   if (this->baseMoveValidation(coordinates) &&
       this->validateFunctions[figure]())
