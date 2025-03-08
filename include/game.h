@@ -12,6 +12,7 @@ public:
   static string color;
   static bool isYourMove;
   static string chessboard[boardHeight][boardWidth];
+  static bool isDisconnect;
 
   void initChessboard();
   void move();

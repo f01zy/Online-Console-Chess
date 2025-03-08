@@ -17,8 +17,12 @@ string Game::opponent = "";
 string Game::color = "";
 bool Game::isYourMove = false;
 string Game::chessboard[boardHeight][boardWidth] = {};
+bool Game::isDisconnect = false;
 
 void Game::menu() {
+  this->isDisconnect = false;
+  this->isYourMove = false;
+
   Service service;
   Auth auth;
 
@@ -72,7 +76,7 @@ void Game::play() {
 
   this->initChessboard();
 
-  while (1) {
+  while (!this->isDisconnect) {
     service.clear();
 
     board.render();
@@ -82,6 +86,8 @@ void Game::play() {
 
     service.sleep(1);
   }
+
+  this->menu();
 }
 
 void Game::initChessboard() {

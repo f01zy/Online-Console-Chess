@@ -60,11 +60,8 @@ void opponentDisconnect(sio::event &event) {
 
   string username = event.get_message()->get_string();
 
-  if (username == Game::opponent) {
-    service.clear();
-    cout << "Your opponent are leave. You win." << endl;
-    exit(0);
-  }
+  if (username == Game::opponent)
+    Game::isDisconnect = true;
 }
 
 Socket::Socket(string url) {
