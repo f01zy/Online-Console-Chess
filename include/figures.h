@@ -12,9 +12,11 @@ public:
 
   vector<short> getCoordinates(string coordinates);
   bool isLetter(char letter);
+
   bool validateMove(string coordinates);
   bool validateCoordinates(string coordinates);
   bool baseMoveValidation(vector<short> coordinates);
+
   static bool pawn();
   static bool king();
   static bool queen();

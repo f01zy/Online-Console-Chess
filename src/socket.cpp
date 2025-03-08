@@ -4,7 +4,9 @@
 #include "../include/game.h"
 #include "../include/service.h"
 
+#include <cstdlib>
 #include <functional>
+#include <iostream>
 #include <sio_message.h>
 #include <sio_socket.h>
 #include <string>
@@ -53,11 +55,24 @@ void moveEvent(sio::event &event) {
   }
 }
 
+void opponentDisconnect(sio::event &event) {
+  Service service;
+
+  string username = event.get_message()->get_string();
+
+  if (username == Game::opponent) {
+    service.clear();
+    cout << "Your opponent are leave. You win." << endl;
+    exit(0);
+  }
+}
+
 Socket::Socket(string url) {
   Service service;
 
   this->on("findOpponent", findOpponent);
-  this->on("move", moveEvent);
+  this->on("moveReceive", moveEvent);
+  this->on("opponentDisconnect", opponentDisconnect);
 
   service.sleep(1);
   c.set_logs_quiet();

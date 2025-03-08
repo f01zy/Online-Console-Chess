@@ -118,7 +118,7 @@ void Game::move() {
   if (!figures.validateMove(coordinates)) {
     service.clear();
     board.render("Dont valid coordinates.");
-    this->move();
+    return this->move();
   }
 
   board.move(coordinates);

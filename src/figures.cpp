@@ -4,7 +4,6 @@
 
 #include <cctype>
 #include <functional>
-#include <iostream>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -53,7 +52,15 @@ vector<short> Figures::getCoordinates(string coordinates) {
 
 bool Figures::isLetter(char letter) { return std::isalpha(letter); }
 
-bool Figures::baseMoveValidation(vector<short> coordinates) { return true; }
+bool Figures::baseMoveValidation(vector<short> coordinates) {
+  string fromFigure = Game::chessboard[coordinates[1]][coordinates[0]];
+  string toFigure = Game::chessboard[coordinates[3]][coordinates[2]];
+
+  if (fromFigure[0] != Game::color[0] || toFigure[0] == Game::color[0])
+    return false;
+
+  return true;
+}
 
 bool Figures::validateCoordinates(string coordinates) {
   if (coordinates.size() != 5 || coordinates[2] != '-')
@@ -78,12 +85,8 @@ bool Figures::validateMove(string c) {
 
   string figure(1, Game::chessboard[coordinates[1]][coordinates[0]][1]);
 
-  if (this->baseMoveValidation(coordinates) &&
-      this->validateFunctions[figure]())
-    return true;
-
-  else
-    return false;
+  return this->baseMoveValidation(coordinates) &&
+         this->validateFunctions[figure]();
 }
 
 bool Figures::pawn() { return true; }
