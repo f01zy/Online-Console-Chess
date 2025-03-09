@@ -11,9 +11,10 @@
 
 using namespace std;
 
-unordered_map<string, function<bool()>> Figures::validateFunctions = {
-    {"P", Figures::pawn}, {"K", Figures::king},     {"Q", Figures::queen},
-    {"R", Figures::rook}, {"B", Figures::elephant}, {"N", Figures::horse}};
+unordered_map<string, function<bool(vector<short>)>>
+    Figures::validateFunctions = {
+        {"P", Figures::pawn}, {"K", Figures::king},     {"Q", Figures::queen},
+        {"R", Figures::rook}, {"B", Figures::elephant}, {"N", Figures::horse}};
 
 vector<short> Figures::getCoordinates(string coordinates) {
   Service service;
@@ -86,12 +87,28 @@ bool Figures::validateMove(string c) {
   string figure(1, Game::chessboard[coordinates[1]][coordinates[0]][1]);
 
   return this->baseMoveValidation(coordinates) &&
-         this->validateFunctions[figure]();
+         this->validateFunctions[figure](coordinates);
 }
 
-bool Figures::pawn() { return true; }
-bool Figures::king() { return true; }
-bool Figures::queen() { return true; }
-bool Figures::horse() { return true; }
-bool Figures::rook() { return true; }
-bool Figures::elephant() { return true; }
+bool Figures::pawn(vector<short> c) {
+  char opponentColor = Game::color == "white" ? 'b' : 'w';
+
+  short maxAdvance = (c[1] == 6 || c[1] == 1) ? 2 : 1;
+  short direction = (opponentColor == 'b') ? 1 : -1;
+
+  if ((c[1] - c[3]) * direction > maxAdvance) {
+    return false;
+  }
+
+  if (abs(c[0] - c[2]) > 1 ||
+      (c[0] - c[2] != 0 && Game::chessboard[c[3]][c[2]][0] != opponentColor)) {
+    return false;
+  }
+
+  return true;
+}
+bool Figures::king(vector<short> c) { return true; }
+bool Figures::queen(vector<short> c) { return true; }
+bool Figures::horse(vector<short> c) { return true; }
+bool Figures::rook(vector<short> c) { return true; }
+bool Figures::elephant(vector<short> c) { return true; }
