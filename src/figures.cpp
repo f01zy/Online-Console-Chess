@@ -107,8 +107,38 @@ bool Figures::pawn(vector<short> c) {
 
   return true;
 }
-bool Figures::king(vector<short> c) { return true; }
+
+bool Figures::king(vector<short> c) {
+  if (abs(c[1] - c[3]) > 1 || abs(c[0] - c[2]) > 1)
+    return false;
+
+  return true;
+}
+
 bool Figures::queen(vector<short> c) { return true; }
+
 bool Figures::horse(vector<short> c) { return true; }
-bool Figures::rook(vector<short> c) { return true; }
+
+bool Figures::rook(vector<short> c) {
+  if (c[1] != c[3] && c[0] != c[2])
+    return false;
+
+  short dirX = (c[2] - c[0]) == 0 ? 0 : (c[2] - c[0]) > 0 ? 1 : -1;
+  short dirY = (c[3] - c[1]) == 0 ? 0 : (c[3] - c[1]) > 0 ? 1 : -1;
+
+  short x = c[0] + dirX;
+  short y = c[1] + dirY;
+
+  while (x != c[2] || y != c[3]) {
+    if (Game::chessboard[y][x] != "  ") {
+      return false;
+    }
+
+    x += dirX;
+    y += dirY;
+  }
+
+  return true;
+}
+
 bool Figures::elephant(vector<short> c) { return true; }
