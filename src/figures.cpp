@@ -96,14 +96,12 @@ bool Figures::pawn(vector<short> c) {
   short maxAdvance = (c[1] == 6 || c[1] == 1) ? 2 : 1;
   short direction = (opponentColor == 'b') ? 1 : -1;
 
-  if ((c[1] - c[3]) * direction > maxAdvance) {
+  if ((c[1] - c[3]) * direction > maxAdvance)
     return false;
-  }
 
   if (abs(c[0] - c[2]) > 1 ||
-      (c[0] - c[2] != 0 && Game::chessboard[c[3]][c[2]][0] != opponentColor)) {
+      (c[0] - c[2] != 0 && Game::chessboard[c[3]][c[2]][0] != opponentColor))
     return false;
-  }
 
   return true;
 }
@@ -115,7 +113,15 @@ bool Figures::king(vector<short> c) {
   return true;
 }
 
-bool Figures::queen(vector<short> c) { return true; }
+bool Figures::queen(vector<short> c) {
+  if (c[1] == c[3] || c[0] == c[2])
+    return Figures::rook(c);
+
+  if (abs(c[0] - c[2]) == abs(c[1] - c[3]))
+    return Figures::elephant(c);
+
+  return false;
+}
 
 bool Figures::horse(vector<short> c) {
   if (abs(c[0] - c[2]) != 1)
@@ -138,9 +144,8 @@ bool Figures::rook(vector<short> c) {
   short y = c[1] + dirY;
 
   while (x != c[2] || y != c[3]) {
-    if (Game::chessboard[y][x] != "  ") {
+    if (Game::chessboard[y][x] != "  ")
       return false;
-    }
 
     x += dirX;
     y += dirY;
@@ -149,4 +154,23 @@ bool Figures::rook(vector<short> c) {
   return true;
 }
 
-bool Figures::elephant(vector<short> c) { return true; }
+bool Figures::elephant(vector<short> c) {
+  if (abs(c[0] - c[2]) != abs(c[1] - c[3]))
+    return false;
+
+  short dirX = (c[2] - c[0]) > 0 ? 1 : -1;
+  short dirY = (c[3] - c[1]) > 0 ? 1 : -1;
+
+  short x = c[0] + dirX;
+  short y = c[1] + dirY;
+
+  while (x != c[2] && y != c[3]) {
+    if (Game::chessboard[y][x] != "  ")
+      return false;
+
+    x += dirX;
+    y += dirY;
+  }
+
+  return true;
+}
