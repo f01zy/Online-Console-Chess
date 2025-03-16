@@ -117,7 +117,15 @@ bool Figures::king(vector<short> c) {
 
 bool Figures::queen(vector<short> c) { return true; }
 
-bool Figures::horse(vector<short> c) { return true; }
+bool Figures::horse(vector<short> c) {
+  if (abs(c[0] - c[2]) != 1)
+    return false;
+
+  if (abs(c[1] - c[3]) != 2)
+    return false;
+
+  return true;
+}
 
 bool Figures::rook(vector<short> c) {
   if (c[1] != c[3] && c[0] != c[2])
