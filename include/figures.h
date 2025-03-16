@@ -22,6 +22,7 @@ public:
   bool baseMoveValidation(vector<short> coordinates);
 
   bool check();
+  bool checkAfterMove(vector<short> c);
   bool checkmate();
 
   static bool pawn(vector<short> coordinates);

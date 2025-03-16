@@ -4,7 +4,6 @@
 
 #include <cctype>
 #include <functional>
-#include <iostream>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -100,11 +99,16 @@ bool Figures::pawn(vector<short> c) {
   short maxAdvance = (c[1] == 6 || c[1] == 1) ? 2 : 1;
   short direction = (opponentColor == 'b') ? 1 : -1;
 
+  if ((c[1] - c[3]) * direction < 0)
+    return false;
+
   if ((c[1] - c[3]) * direction > maxAdvance)
     return false;
 
-  if (abs(c[0] - c[2]) > 1 ||
-      (c[0] - c[2] != 0 && Game::chessboard[c[3]][c[2]][0] != opponentColor))
+  if (abs(c[0] - c[2]) > 1)
+    return false;
+
+  if (c[0] - c[2] != 0 && Game::chessboard[c[3]][c[2]][0] != opponentColor)
     return false;
 
   return true;
@@ -183,24 +187,26 @@ bool Figures::check() {
   string color(1, Game::color[0]);
   vector<short> king = this->findFigure(color + "K");
 
-  for (short i = 0; i < boardHeight; i++)
+  for (short i = 0; i < boardHeight; i++) {
     for (short j = 0; j < boardWidth; j++) {
       string v = Game::chessboard[i][j];
 
-      if (v == "  " || v[1] == 'K' || v[0] == Game::color[0])
+      if (v == "  " || v[0] == color[0])
         continue;
 
       string figure(1, v[1]);
+      vector<short> move = {j, i, king[0], king[1]};
 
-      vector<short> c = {j, i, king[0], king[1]};
-
-      if (this->validateFunctions[figure](c)) {
+      if (this->validateFunctions[figure](move)) {
         return true;
       }
     }
+  }
 
   return false;
 }
+
+bool Figures::checkAfterMove(vector<short> c) {}
 
 bool Figures::checkmate() { return true; }
 
