@@ -4,6 +4,7 @@
 
 #include <cctype>
 #include <functional>
+#include <iostream>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -58,6 +59,9 @@ bool Figures::baseMoveValidation(vector<short> coordinates) {
   string toFigure = Game::chessboard[coordinates[3]][coordinates[2]];
 
   if (fromFigure[0] != Game::color[0] || toFigure[0] == Game::color[0])
+    return false;
+
+  if (this->check())
     return false;
 
   return true;
@@ -173,4 +177,38 @@ bool Figures::elephant(vector<short> c) {
   }
 
   return true;
+}
+
+bool Figures::check() {
+  string color(1, Game::color[0]);
+  vector<short> king = this->findFigure(color + "K");
+
+  for (short i = 0; i < boardHeight; i++)
+    for (short j = 0; j < boardWidth; j++) {
+      string v = Game::chessboard[i][j];
+
+      if (v == "  " || v[1] == 'K' || v[0] == Game::color[0])
+        continue;
+
+      string figure(1, v[1]);
+
+      vector<short> c = {j, i, king[0], king[1]};
+
+      if (this->validateFunctions[figure](c)) {
+        return true;
+      }
+    }
+
+  return false;
+}
+
+bool Figures::checkmate() { return true; }
+
+vector<short> Figures::findFigure(string figure) {
+  for (short i = 0; i < boardHeight; i++)
+    for (short j = 0; j < boardWidth; j++)
+      if (Game::chessboard[i][j] == figure)
+        return {j, i};
+
+  return {-1, -1};
 }

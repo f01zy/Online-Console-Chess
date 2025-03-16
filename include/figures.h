@@ -1,9 +1,12 @@
 #pragma once
 
+#include "globals.h"
+
 #include <functional>
 #include <string>
 #include <unordered_map>
 #include <vector>
+
 using namespace std;
 
 class Figures {
@@ -12,10 +15,14 @@ public:
 
   vector<short> getCoordinates(string coordinates);
   bool isLetter(char letter);
+  vector<short> findFigure(string figure);
 
   bool validateMove(string coordinates);
   bool validateCoordinates(string coordinates);
   bool baseMoveValidation(vector<short> coordinates);
+
+  bool check();
+  bool checkmate();
 
   static bool pawn(vector<short> coordinates);
   static bool king(vector<short> coordinates);
