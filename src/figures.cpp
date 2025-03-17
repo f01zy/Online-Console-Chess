@@ -104,7 +104,7 @@ bool Figures::validateMove(string c) {
 
 bool Figures::check(string board[8][8]) {
   string color(1, Game::color[0]);
-  vector<short> king = this->findFigure(color + "K");
+  vector<short> king = this->findFigure(board, color + "K");
 
   for (short i = 0; i < 8; i++) {
     for (short j = 0; j < 8; j++) {
@@ -137,10 +137,10 @@ bool Figures::checkDefend(vector<short> c) {
   return this->check(tempBoard);
 }
 
-vector<short> Figures::findFigure(string figure) {
+vector<short> Figures::findFigure(string board[8][8], string figure) {
   for (short i = 0; i < 8; i++)
     for (short j = 0; j < 8; j++)
-      if (Game::chessboard[i][j] == figure)
+      if (board[i][j] == figure)
         return {j, i};
 
   return {-1, -1};

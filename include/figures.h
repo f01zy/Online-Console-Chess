@@ -14,7 +14,7 @@ public:
 
   vector<short> getCoordinates(string coordinates);
   bool isLetter(char letter);
-  vector<short> findFigure(string figure);
+  vector<short> findFigure(string board[8][8], string figure);
 
   bool validateMove(string coordinates);
   bool validateCoordinates(string coordinates);
