@@ -16,7 +16,7 @@ using namespace std;
 string Game::opponent = "";
 string Game::color = "";
 bool Game::isYourMove = false;
-string Game::chessboard[boardHeight][boardWidth] = {};
+string Game::chessboard[8][8] = {};
 bool Game::isDisconnect = false;
 
 void Game::menu() {
@@ -91,7 +91,7 @@ void Game::play() {
 }
 
 void Game::initChessboard() {
-  string board[boardHeight][boardWidth] = {
+  string board[8][8] = {
       {"bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"},
       {"bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"},
       {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
@@ -102,8 +102,8 @@ void Game::initChessboard() {
       {"wR", "wN", "wB", "wQ", "wK", "wB", "wN", "wR"},
   };
 
-  for (short i = 0; i < boardHeight; i++)
-    for (short j = 0; j < boardWidth; j++)
+  for (short i = 0; i < 8; i++)
+    for (short j = 0; j < 8; j++)
       this->chessboard[i][j] = board[i][j];
 }
 

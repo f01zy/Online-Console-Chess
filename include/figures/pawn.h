@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../game.h"
 #include "figure.h"
 
 #include <vector>
@@ -10,7 +9,7 @@ using namespace std;
 class Pawn : public Figure {
 public:
   short points = 1;
-  static bool validate(vector<short> c) {
+  static bool validate(string board[8][8], vector<short> c) {
     char opponentColor = Game::color == "white" ? 'b' : 'w';
 
     short maxAdvance = (c[1] == 6 || c[1] == 1) ? 2 : 1;
@@ -25,7 +24,7 @@ public:
     if (abs(c[0] - c[2]) > 1)
       return false;
 
-    if (c[0] - c[2] != 0 && Game::chessboard[c[3]][c[2]][0] != opponentColor)
+    if (c[0] - c[2] != 0 && board[c[3]][c[2]][0] != opponentColor)
       return false;
 
     return true;

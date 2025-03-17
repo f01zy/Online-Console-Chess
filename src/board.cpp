@@ -1,7 +1,6 @@
 #include "../include/board.h"
 #include "../include/figures.h"
 #include "../include/game.h"
-#include "../include/globals.h"
 #include "../include/service.h"
 
 #include <algorithm>
@@ -15,7 +14,7 @@ void Board::render(string error) {
   Service service;
   service.clear();
 
-  string board[boardHeight][boardWidth];
+  string board[8][8];
   vector<char> letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
   if (error.size() > 0) {
@@ -23,30 +22,30 @@ void Board::render(string error) {
     cout << endl;
   }
 
-  for (short i = 0; i < boardHeight; i++) {
-    for (short j = 0; j < boardWidth; j++) {
+  for (short i = 0; i < 8; i++) {
+    for (short j = 0; j < 8; j++) {
       board[i][j] = Game::chessboard[i][j];
     }
   }
 
   if (Game::color == "black") {
-    for (short i = 0; i < boardHeight / 2; ++i) {
-      swap(board[i], board[boardHeight - i - 1]);
+    for (short i = 0; i < 8 / 2; ++i) {
+      swap(board[i], board[8 - i - 1]);
     }
 
-    for (short i = 0; i < boardHeight; ++i) {
-      reverse(board[i], board[i] + boardWidth);
+    for (short i = 0; i < 8; ++i) {
+      reverse(board[i], board[i] + 8);
     }
   }
 
-  for (short i = 0; i < boardHeight; i++) {
-    short number = boardHeight - i;
+  for (short i = 0; i < 8; i++) {
+    short number = 8 - i;
 
     if (Game::color == "black")
       number = i + 1;
 
     cout << number;
-    for (short j = 0; j < boardWidth; j++) {
+    for (short j = 0; j < 8; j++) {
       cout << " " << board[i][j];
     }
     cout << endl;

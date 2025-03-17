@@ -10,7 +10,7 @@ using namespace std;
 class Horse : public Figure {
 public:
   short points = 3;
-  static bool validate(vector<short> c) {
+  static bool validate(string board[8][8], vector<short> c) {
     if (abs(c[0] - c[2]) != 1)
       return false;
 

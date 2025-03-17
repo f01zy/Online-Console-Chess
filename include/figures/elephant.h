@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../game.h"
 #include "figure.h"
 
 #include <vector>
@@ -10,7 +9,7 @@ using namespace std;
 class Elephant : public Figure {
 public:
   short points = 3;
-  static bool validate(vector<short> c) {
+  static bool validate(string board[8][8], vector<short> c) {
     if (abs(c[0] - c[2]) != abs(c[1] - c[3]))
       return false;
 
@@ -21,7 +20,7 @@ public:
     short y = c[1] + dirY;
 
     while (x != c[2] && y != c[3]) {
-      if (Game::chessboard[y][x] != "  ")
+      if (board[y][x] != "  ")
         return false;
 
       x += dirX;

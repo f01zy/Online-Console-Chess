@@ -1,7 +1,5 @@
 #pragma once
 
-#include "globals.h"
-
 #include <functional>
 #include <string>
 #include <unordered_map>
@@ -11,7 +9,8 @@ using namespace std;
 
 class Figures {
 public:
-  static unordered_map<string, function<bool(vector<short>)>> validateFunctions;
+  static unordered_map<string, function<bool(string[8][8], vector<short>)>>
+      validateFunctions;
 
   vector<short> getCoordinates(string coordinates);
   bool isLetter(char letter);
@@ -21,5 +20,6 @@ public:
   bool validateCoordinates(string coordinates);
   bool requiredMoveValidate(vector<short> coordinates);
 
-  bool check();
+  bool check(string board[8][8]);
+  bool checkDefend(vector<short> c);
 };

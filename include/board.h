@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../include/globals.h"
-
 #include <string>
 
 using namespace std;

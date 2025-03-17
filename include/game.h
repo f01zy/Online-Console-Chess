@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../include/globals.h"
-
 #include <string>
 
 using namespace std;
@@ -11,7 +9,7 @@ public:
   static string opponent;
   static string color;
   static bool isYourMove;
-  static string chessboard[boardHeight][boardWidth];
+  static string chessboard[8][8];
   static bool isDisconnect;
 
   void initChessboard();
