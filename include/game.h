@@ -20,4 +20,5 @@ public:
   void searchOpponent();
   void waiting();
   void readyToGame();
+  void mate();
 };

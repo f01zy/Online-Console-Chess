@@ -20,9 +20,6 @@ string Game::chessboard[8][8] = {};
 bool Game::isDisconnect = false;
 
 void Game::menu() {
-  this->isDisconnect = false;
-  this->isYourMove = false;
-
   Service service;
   Auth auth;
 
@@ -91,6 +88,11 @@ void Game::play() {
 
     service.sleep(1);
   }
+
+  this->isDisconnect = false;
+  this->isYourMove = false;
+  this->opponent.clear();
+  this->color.clear();
 
   this->menu();
 }
@@ -176,3 +178,5 @@ void Game::searchOpponent() {
 
   this->waiting();
 }
+
+void Game::mate() { exit(0); }

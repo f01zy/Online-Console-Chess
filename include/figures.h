@@ -22,4 +22,5 @@ public:
 
   bool check(string board[8][8]);
   bool checkCheckAfterMove(vector<short> c);
+  bool checkmate(string board[8][8]);
 };

@@ -62,11 +62,16 @@ vector<short> Figures::getCoordinates(string coordinates) {
 bool Figures::isLetter(char letter) { return std::isalpha(letter); }
 
 bool Figures::requiredMoveValidate(vector<short> coordinates) {
+  Game game;
+
   string fromFigure = Game::chessboard[coordinates[1]][coordinates[0]];
   string toFigure = Game::chessboard[coordinates[3]][coordinates[2]];
 
   if (fromFigure[0] != Game::color[0] || toFigure[0] == Game::color[0])
     return false;
+
+  if (this->checkmate(Game::chessboard))
+    game.mate();
 
   if (this->checkCheckAfterMove(coordinates))
     return false;
@@ -137,6 +142,32 @@ bool Figures::checkCheckAfterMove(vector<short> c) {
   tempBoard[c[3]][c[2]] = Game::chessboard[c[1]][c[0]];
 
   return this->check(tempBoard);
+}
+
+bool Figures::checkmate(string board[8][8]) {
+  if (!this->check(board)) {
+    return false;
+  }
+
+  for (short i = 0; i < 8; i++) {
+    for (short j = 0; j < 8; j++) {
+      string v = board[i][j];
+      if (v == "  " || v[0] != Game::color[0])
+        continue;
+
+      for (short k = 0; k < 8; k++) {
+        for (short n = 0; n < 8; n++) {
+          vector<short> coords = {j, i, n, k};
+
+          if (!this->checkCheckAfterMove(coords)) {
+            return false;
+          }
+        }
+      }
+    }
+  }
+
+  return true;
 }
 
 vector<short> Figures::findFigure(string board[8][8], string figure) {
