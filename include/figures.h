@@ -21,5 +21,5 @@ public:
   bool requiredMoveValidate(vector<short> coordinates);
 
   bool check(string board[8][8]);
-  bool checkDefend(vector<short> c);
+  bool checkCheckAfterMove(vector<short> c);
 };

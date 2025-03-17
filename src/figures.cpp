@@ -11,6 +11,7 @@
 
 #include <cctype>
 #include <functional>
+#include <iostream>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -68,9 +69,8 @@ bool Figures::requiredMoveValidate(vector<short> coordinates) {
   if (fromFigure[0] != Game::color[0] || toFigure[0] == Game::color[0])
     return false;
 
-  if (this->check(Game::chessboard))
-    if (this->checkDefend(coordinates))
-      return false;
+  if (this->checkCheckAfterMove(coordinates))
+    return false;
 
   return true;
 }
@@ -98,8 +98,8 @@ bool Figures::validateMove(string c) {
 
   string figure(1, Game::chessboard[coordinates[1]][coordinates[0]][1]);
 
-  return this->requiredMoveValidate(coordinates) &&
-         this->validateFunctions[figure](Game::chessboard, coordinates);
+  return this->validateFunctions[figure](Game::chessboard, coordinates) &&
+         this->requiredMoveValidate(coordinates);
 }
 
 bool Figures::check(string board[8][8]) {
@@ -116,23 +116,26 @@ bool Figures::check(string board[8][8]) {
       string figure(1, v[1]);
       vector<short> move = {j, i, king[0], king[1]};
 
-      if (this->validateFunctions[figure](board, move))
+      if (this->validateFunctions[figure](board, move)) {
         return true;
+      }
     }
   }
 
   return false;
 }
 
-bool Figures::checkDefend(vector<short> c) {
+bool Figures::checkCheckAfterMove(vector<short> c) {
+  Service service;
+
   string tempBoard[8][8];
 
   for (short i = 0; i < 8; i++)
     for (short j = 0; j < 8; j++)
       tempBoard[i][j] = Game::chessboard[i][j];
 
-  tempBoard[1][0] = "  ";
-  tempBoard[3][2] = Game::chessboard[1][0];
+  tempBoard[c[1]][c[0]] = "  ";
+  tempBoard[c[3]][c[2]] = Game::chessboard[c[1]][c[0]];
 
   return this->check(tempBoard);
 }
