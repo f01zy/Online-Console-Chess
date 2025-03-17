@@ -1,0 +1,33 @@
+#pragma once
+
+#include "../game.h"
+#include "figure.h"
+
+#include <vector>
+
+using namespace std;
+
+class Rook : public Figure {
+public:
+  short points = 5;
+  static bool validate(vector<short> c) {
+    if (c[1] != c[3] && c[0] != c[2])
+      return false;
+
+    short dirX = (c[2] - c[0]) == 0 ? 0 : (c[2] - c[0]) > 0 ? 1 : -1;
+    short dirY = (c[3] - c[1]) == 0 ? 0 : (c[3] - c[1]) > 0 ? 1 : -1;
+
+    short x = c[0] + dirX;
+    short y = c[1] + dirY;
+
+    while (x != c[2] || y != c[3]) {
+      if (Game::chessboard[y][x] != "  ")
+        return false;
+
+      x += dirX;
+      y += dirY;
+    }
+
+    return true;
+  };
+};

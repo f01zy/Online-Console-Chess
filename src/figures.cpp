@@ -2,6 +2,13 @@
 #include "../include/game.h"
 #include "../include/service.h"
 
+#include "../include/figures/elephant.h"
+#include "../include/figures/horse.h"
+#include "../include/figures/king.h"
+#include "../include/figures/pawn.h"
+#include "../include/figures/queen.h"
+#include "../include/figures/rook.h"
+
 #include <cctype>
 #include <functional>
 #include <stdexcept>
@@ -13,8 +20,9 @@ using namespace std;
 
 unordered_map<string, function<bool(vector<short>)>>
     Figures::validateFunctions = {
-        {"P", Figures::pawn}, {"K", Figures::king},     {"Q", Figures::queen},
-        {"R", Figures::rook}, {"B", Figures::elephant}, {"N", Figures::horse}};
+        {"P", Pawn::validate},     {"K", King::validate},
+        {"Q", Queen::validate},    {"R", Rook::validate},
+        {"B", Elephant::validate}, {"N", Horse::validate}};
 
 vector<short> Figures::getCoordinates(string coordinates) {
   Service service;
@@ -53,7 +61,7 @@ vector<short> Figures::getCoordinates(string coordinates) {
 
 bool Figures::isLetter(char letter) { return std::isalpha(letter); }
 
-bool Figures::baseMoveValidation(vector<short> coordinates) {
+bool Figures::requiredMoveValidate(vector<short> coordinates) {
   string fromFigure = Game::chessboard[coordinates[1]][coordinates[0]];
   string toFigure = Game::chessboard[coordinates[3]][coordinates[2]];
 
@@ -89,98 +97,8 @@ bool Figures::validateMove(string c) {
 
   string figure(1, Game::chessboard[coordinates[1]][coordinates[0]][1]);
 
-  return this->baseMoveValidation(coordinates) &&
+  return this->requiredMoveValidate(coordinates) &&
          this->validateFunctions[figure](coordinates);
-}
-
-bool Figures::pawn(vector<short> c) {
-  char opponentColor = Game::color == "white" ? 'b' : 'w';
-
-  short maxAdvance = (c[1] == 6 || c[1] == 1) ? 2 : 1;
-  short direction = (opponentColor == 'b') ? 1 : -1;
-
-  if ((c[1] - c[3]) * direction < 0)
-    return false;
-
-  if ((c[1] - c[3]) * direction > maxAdvance)
-    return false;
-
-  if (abs(c[0] - c[2]) > 1)
-    return false;
-
-  if (c[0] - c[2] != 0 && Game::chessboard[c[3]][c[2]][0] != opponentColor)
-    return false;
-
-  return true;
-}
-
-bool Figures::king(vector<short> c) {
-  if (abs(c[1] - c[3]) > 1 || abs(c[0] - c[2]) > 1)
-    return false;
-
-  return true;
-}
-
-bool Figures::queen(vector<short> c) {
-  if (c[1] == c[3] || c[0] == c[2])
-    return Figures::rook(c);
-
-  if (abs(c[0] - c[2]) == abs(c[1] - c[3]))
-    return Figures::elephant(c);
-
-  return false;
-}
-
-bool Figures::horse(vector<short> c) {
-  if (abs(c[0] - c[2]) != 1)
-    return false;
-
-  if (abs(c[1] - c[3]) != 2)
-    return false;
-
-  return true;
-}
-
-bool Figures::rook(vector<short> c) {
-  if (c[1] != c[3] && c[0] != c[2])
-    return false;
-
-  short dirX = (c[2] - c[0]) == 0 ? 0 : (c[2] - c[0]) > 0 ? 1 : -1;
-  short dirY = (c[3] - c[1]) == 0 ? 0 : (c[3] - c[1]) > 0 ? 1 : -1;
-
-  short x = c[0] + dirX;
-  short y = c[1] + dirY;
-
-  while (x != c[2] || y != c[3]) {
-    if (Game::chessboard[y][x] != "  ")
-      return false;
-
-    x += dirX;
-    y += dirY;
-  }
-
-  return true;
-}
-
-bool Figures::elephant(vector<short> c) {
-  if (abs(c[0] - c[2]) != abs(c[1] - c[3]))
-    return false;
-
-  short dirX = (c[2] - c[0]) > 0 ? 1 : -1;
-  short dirY = (c[3] - c[1]) > 0 ? 1 : -1;
-
-  short x = c[0] + dirX;
-  short y = c[1] + dirY;
-
-  while (x != c[2] && y != c[3]) {
-    if (Game::chessboard[y][x] != "  ")
-      return false;
-
-    x += dirX;
-    y += dirY;
-  }
-
-  return true;
 }
 
 bool Figures::check() {
@@ -205,10 +123,6 @@ bool Figures::check() {
 
   return false;
 }
-
-bool Figures::checkAfterMove(vector<short> c) {}
-
-bool Figures::checkmate() { return true; }
 
 vector<short> Figures::findFigure(string figure) {
   for (short i = 0; i < boardHeight; i++)
