@@ -49,3 +49,17 @@ short Service::getNumber(string message) {
 
   return result;
 }
+
+void Service::openPageInBrowser(string page) {
+  string command;
+
+#if defined(_WIN32) || defined(_WIN64)
+  command = "start " + page;
+#elif defined(__APPLE__) || defined(__MACH__)
+  command = "open " + page;
+#else
+  command = "xdg-open " + page;
+#endif
+
+  system(command.c_str());
+}

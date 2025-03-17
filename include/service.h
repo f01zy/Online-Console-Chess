@@ -11,4 +11,5 @@ public:
   void clear();
   void sleep(short seconds);
   short getNumber(string message);
+  void openPageInBrowser(string page);
 };

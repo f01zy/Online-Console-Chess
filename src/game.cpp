@@ -42,6 +42,11 @@ void Game::menu() {
     this->searchOpponent();
     break;
 
+  case 2:
+    service.openPageInBrowser(GITHUB);
+    this->menu();
+    break;
+
   case 3:
     auth.logout();
     break;
