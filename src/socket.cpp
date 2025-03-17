@@ -54,13 +54,13 @@ void moveEvent(sio::event &event) {
   }
 }
 
-void opponentDisconnect(sio::event &event) {
+void opponentLose(sio::event &event) {
   Service service;
 
   string username = event.get_message()->get_string();
 
   if (username == Game::opponent)
-    Game::isDisconnect = true;
+    Game::isNeedToFinishAGame = true;
 }
 
 Socket::Socket(string url) {
@@ -68,7 +68,7 @@ Socket::Socket(string url) {
 
   this->on("findOpponent", findOpponent);
   this->on("moveReceive", moveEvent);
-  this->on("opponentDisconnect", opponentDisconnect);
+  this->on("opponentLose", opponentLose);
 
   service.sleep(1);
   c.set_logs_quiet();

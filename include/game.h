@@ -10,7 +10,7 @@ public:
   static string color;
   static bool isYourMove;
   static string chessboard[8][8];
-  static bool isDisconnect;
+  static bool isNeedToFinishAGame;
 
   void initChessboard();
   void move();

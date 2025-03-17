@@ -17,7 +17,7 @@ string Game::opponent = "";
 string Game::color = "";
 bool Game::isYourMove = false;
 string Game::chessboard[8][8] = {};
-bool Game::isDisconnect = false;
+bool Game::isNeedToFinishAGame = false;
 
 void Game::menu() {
   Service service;
@@ -78,7 +78,7 @@ void Game::play() {
 
   this->initChessboard();
 
-  while (!this->isDisconnect) {
+  while (!this->isNeedToFinishAGame) {
     service.clear();
 
     board.render();
@@ -89,7 +89,7 @@ void Game::play() {
     service.sleep(1);
   }
 
-  this->isDisconnect = false;
+  this->isNeedToFinishAGame = false;
   this->isYourMove = false;
   this->opponent.clear();
   this->color.clear();
@@ -179,4 +179,11 @@ void Game::searchOpponent() {
   this->waiting();
 }
 
-void Game::mate() { exit(0); }
+void Game::mate() {
+  Socket &socket = Socket::getInstance(SERVER_URL);
+
+  string username = Auth::user["username"];
+  socket.send("lose", username);
+
+  Game::isNeedToFinishAGame = true;
+}
