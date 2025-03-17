@@ -24,9 +24,15 @@ public:
     if (abs(c[0] - c[2]) > 1)
       return false;
 
-    if (c[0] - c[2] != 0 && board[c[3]][c[2]][0] != opponentColor)
+    if (c[0] != c[2] && board[c[3]][c[2]][0] != opponentColor)
       return false;
 
-    return true;
+    if (c[0] != c[2] && abs(c[1] - c[3]) == 1)
+      return true;
+
+    if (c[0] == c[2] && abs(c[1] - c[3]) > 0)
+      return true;
+
+    return false;
   };
 };

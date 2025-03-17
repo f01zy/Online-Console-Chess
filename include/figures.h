@@ -16,7 +16,7 @@ public:
   bool isLetter(char letter);
   vector<short> findFigure(string board[8][8], string figure);
 
-  bool validateMove(string coordinates);
+  bool validateMove(vector<short> coordinates);
   bool validateCoordinates(string coordinates);
   bool requiredMoveValidate(vector<short> coordinates);
 

@@ -11,6 +11,7 @@
 
 #include <cctype>
 #include <functional>
+#include <iostream>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -70,9 +71,6 @@ bool Figures::requiredMoveValidate(vector<short> coordinates) {
   if (fromFigure[0] != Game::color[0] || toFigure[0] == Game::color[0])
     return false;
 
-  if (this->checkmate(Game::chessboard))
-    game.mate();
-
   if (this->checkCheckAfterMove(coordinates))
     return false;
 
@@ -92,10 +90,8 @@ bool Figures::validateCoordinates(string coordinates) {
   return true;
 }
 
-bool Figures::validateMove(string c) {
+bool Figures::validateMove(vector<short> coordinates) {
   Service service;
-
-  vector<short> coordinates = this->getCoordinates(c);
 
   if (coordinates.size() == 0)
     return false;
@@ -145,6 +141,8 @@ bool Figures::checkCheckAfterMove(vector<short> c) {
 }
 
 bool Figures::checkmate(string board[8][8]) {
+  Service service;
+
   if (!this->check(board)) {
     return false;
   }
@@ -152,16 +150,24 @@ bool Figures::checkmate(string board[8][8]) {
   for (short i = 0; i < 8; i++) {
     for (short j = 0; j < 8; j++) {
       string v = board[i][j];
+
       if (v == "  " || v[0] != Game::color[0])
         continue;
 
+      string figure(1, v[1]);
+
       for (short k = 0; k < 8; k++) {
         for (short n = 0; n < 8; n++) {
-          vector<short> coords = {j, i, n, k};
+          vector<short> coordinates = {j, i, n, k};
 
-          if (!this->checkCheckAfterMove(coords)) {
+          if (!this->validateFunctions[figure](board, coordinates))
+            continue;
+
+          if (!this->requiredMoveValidate(coordinates))
+            continue;
+
+          if (!this->checkCheckAfterMove(coordinates))
             return false;
-          }
         }
       }
     }

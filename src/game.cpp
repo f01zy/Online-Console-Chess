@@ -128,7 +128,7 @@ void Game::move() {
   string coordinates;
   cin >> coordinates;
 
-  if (!figures.validateMove(coordinates)) {
+  if (!figures.validateMove(figures.getCoordinates(coordinates))) {
     service.clear();
     board.render("Dont valid coordinates.");
     return this->move();
