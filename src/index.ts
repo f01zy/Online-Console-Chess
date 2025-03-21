@@ -1,8 +1,13 @@
 import dotenv from "dotenv"
 import { Variables } from "./env/variables.env"
 
-const MODE = process.argv[process.argv.indexOf("--mode") + 1]
-dotenv.config({ path: `.${MODE}.env` })
+const mode_index = process.argv.indexOf("--mode")
+const mode = process.argv[mode_index + 1]
+const env = mode_index != -1 ? mode + "." : ""
+
+dotenv.config({
+  path: `.${env}env`
+})
 
 Variables.initialize()
 
@@ -36,7 +41,7 @@ const start = async () => {
   try {
     await prisma.$connect().then(() => logger.info("postgreSQL connected"))
     server.listen(PORT, () => {
-      logger.info(`server running at ${MODE} mode`)
+      logger.info(`server running at ${mode} mode`)
     })
   } catch (err) {
     await prisma.$disconnect()
