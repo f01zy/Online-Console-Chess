@@ -1,4 +1,3 @@
-import { Variables } from "../../env/variables.env"
 import { ApiError } from "../../exceptions/api.exception"
 import { prisma } from "../../prisma"
 import { MailService } from "./mail.service"

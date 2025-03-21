@@ -1,8 +1,10 @@
-import express from "express"
 import dotenv from "dotenv"
+import { Variables } from "./env/variables.env"
 
 const MODE = process.argv[process.argv.indexOf("--mode") + 1]
 dotenv.config({ path: `.${MODE}.env` })
+
+Variables.initialize()
 
 import { createServer } from "node:http"
 import { Server } from "socket.io"
@@ -13,6 +15,7 @@ import { prisma } from "./prisma"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 import { logger } from "./utils/logger.utils"
+import express from "express"
 
 const app = express()
 const server = createServer(app)
