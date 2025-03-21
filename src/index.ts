@@ -44,6 +44,7 @@ const start = async () => {
       logger.info(`server running at ${mode} mode`)
     })
   } catch (err) {
+    console.log(err)
     await prisma.$disconnect()
   }
 }
