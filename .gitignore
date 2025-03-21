@@ -10,11 +10,6 @@ dist
 coverage
 *.lcov
 
-# logs
-logs
-_.log
-report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
-
 # dotenv environment variable files
 .development.env
 .production.env
@@ -29,3 +24,6 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # Finder (MacOS) folder config
 .DS_Store
+
+# Logs
+combined.log
