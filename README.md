@@ -3,9 +3,10 @@
 A project that allows you to play chess with other people from the console. You can deploy a [server](https://github.com/f01zy/Online-Console-Chess/tree/server) locally and play, for example, on one computer, or use our remote server to play with other people.
 
 ## Dependencies
+* git
 * cmake
-* postgres
-* bun
+* postgres (to start a local server)
+* bun (to start a local server)
 
 ## Instalation
 ### Client
