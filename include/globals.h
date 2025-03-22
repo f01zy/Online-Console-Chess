@@ -4,6 +4,12 @@
 
 using namespace std;
 
-const string SERVER_URL = "http://localhost:3000";
-const string API_URL = SERVER_URL + "/api/v1";
+extern string API_URL;
+
+string getApiUrl();
+void setApiUrl(string url);
+
+const string DEVELOPMENT_URL = "http://localhost:3000";
+const string PRODUCTION_URL = "http://localhost:3000";
+
 const string GITHUB = "https://github.com/f01zy/Online-Console-Chess";

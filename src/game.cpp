@@ -19,6 +19,28 @@ bool Game::isYourMove = false;
 string Game::chessboard[8][8] = {};
 bool Game::isNeedToFinishAGame = false;
 
+void Game::mode() {
+  Service service;
+  service.clear();
+
+  vector<string> options = {"Online", "Local"};
+  short choice = service.select(options);
+
+  switch (choice) {
+  case 1:
+    setApiUrl(PRODUCTION_URL);
+    break;
+
+  case 2:
+    setApiUrl(DEVELOPMENT_URL);
+    break;
+
+  default:
+    this->mode();
+    break;
+  }
+}
+
 void Game::menu() {
   Service service;
   Auth auth;
@@ -26,13 +48,7 @@ void Game::menu() {
   service.clear();
 
   vector<string> options = {"Online game", "Github", "Log out", "Exit"};
-
-  for (short i = 0; i < options.size(); i++) {
-    cout << options[i] << " (" << i + 1 << ")" << endl;
-  }
-
-  cout << endl;
-  short choice = service.getNumber("Your choice: ");
+  short choice = service.select(options);
 
   switch (choice) {
   case 1:
@@ -115,7 +131,7 @@ void Game::initChessboard() {
 }
 
 void Game::move() {
-  Socket &socket = Socket::getInstance(SERVER_URL);
+  Socket &socket = Socket::getInstance();
   Figures figures;
   Board board;
   Service service;
@@ -150,7 +166,7 @@ void Game::waiting() {
 
   while (this->opponent.size() == 0) {
     service.clear();
-    Socket &socket = Socket::getInstance(SERVER_URL);
+    Socket &socket = Socket::getInstance();
     string username = Auth::user["username"];
     string wait = "";
 
@@ -171,7 +187,7 @@ void Game::waiting() {
 }
 
 void Game::searchOpponent() {
-  Socket &socket = Socket::getInstance(SERVER_URL);
+  Socket &socket = Socket::getInstance();
 
   string username = Auth::user["username"];
   socket.send("searchOpponent", username);
@@ -180,7 +196,7 @@ void Game::searchOpponent() {
 }
 
 void Game::mate() {
-  Socket &socket = Socket::getInstance(SERVER_URL);
+  Socket &socket = Socket::getInstance();
 
   string username = Auth::user["username"];
   socket.send("lose", username);

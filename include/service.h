@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -12,4 +13,5 @@ public:
   void sleep(short seconds);
   short getNumber(string message);
   void openPageInBrowser(string page);
+  short select(vector<string> options);
 };

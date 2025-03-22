@@ -12,6 +12,7 @@ public:
   static string chessboard[8][8];
   static bool isNeedToFinishAGame;
 
+  void mode();
   void initChessboard();
   void move();
   void play();

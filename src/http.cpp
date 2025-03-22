@@ -23,7 +23,7 @@ string Http::request(string endpoint, string data) {
   curl = curl_easy_init();
 
   if (curl) {
-    string url = API_URL + endpoint;
+    string url = getApiUrl() + "/api/v1" + endpoint;
 
     if (data.size() > 0) {
       struct curl_slist *headers = NULL;

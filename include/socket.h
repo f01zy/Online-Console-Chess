@@ -1,5 +1,7 @@
 #pragma once
 
+#include "../include/globals.h"
+
 #include <memory>
 #include <sio_client.h>
 #include <sio_socket.h>
@@ -10,8 +12,8 @@ using namespace sio;
 
 class Socket {
 public:
-  static Socket &getInstance(string url) {
-    static Socket instance(url);
+  static Socket &getInstance() {
+    static Socket instance(getApiUrl());
     return instance;
   }
 

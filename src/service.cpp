@@ -5,8 +5,23 @@
 #include <cstdlib>
 #include <iostream>
 #include <thread>
+#include <vector>
 
 using namespace std;
+
+short Service::select(vector<string> options) {
+  for (short i = 0; i < options.size(); i++) {
+    cout << options[i] << " (" << i + 1 << ")" << endl;
+  }
+
+  cout << endl;
+  short choice = this->getNumber("Your choice: ");
+
+  if (choice > options.size() + 1)
+    return -1;
+
+  return choice;
+}
 
 void Service::clear() { system("clear"); }
 void Service::sleep(short seconds) {

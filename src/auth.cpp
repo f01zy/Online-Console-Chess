@@ -25,6 +25,7 @@ void Auth::render(string error) {
 
     if (!error.empty()) {
       cout << error << endl;
+      cout << endl;
     }
 
     string email;
@@ -32,11 +33,8 @@ void Auth::render(string error) {
     string password;
     string confirm_password;
 
-    cout << "============== Chess Online =============" << endl;
-    cout << "===== Sign In (1) ===== Sign Up (2) =====" << endl;
-
-    cout << endl;
-    short choice = service.getNumber("Your choice: ");
+    vector<string> options = {"Sing In", "Sign Up"};
+    short choice = service.select(options);
 
     service.clear();
     if (choice == 1) {
