@@ -8,7 +8,7 @@ find_package(sioclient REQUIRED)
 
 set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 file(GLOB SRC_FILES "${SOURCE_DIR}/*.cpp")
-add_executable(start ${SRC_FILES})
+add_executable(chess ${SRC_FILES})
 
-target_link_libraries(start PRIVATE CURL::libcurl)
-target_link_libraries(start PRIVATE sioclient)
+target_link_libraries(chess PRIVATE CURL::libcurl)
+target_link_libraries(chess PRIVATE sioclient)
