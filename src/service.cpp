@@ -7,14 +7,12 @@
 #include <thread>
 #include <vector>
 
-using namespace std;
-
-short Service::select(vector<string> options) {
+short Service::select(std::vector<std::string> options) {
   for (short i = 0; i < options.size(); i++) {
-    cout << options[i] << " (" << i + 1 << ")" << endl;
+    std::cout << options[i] << " (" << i + 1 << ")" << std::endl;
   }
 
-  cout << endl;
+  std::cout << std::endl;
   short choice = this->getNumber("Your choice: ");
 
   if (choice > options.size() + 1)
@@ -25,11 +23,11 @@ short Service::select(vector<string> options) {
 
 void Service::clear() { system("clear"); }
 void Service::sleep(short seconds) {
-  this_thread::sleep_for(chrono::seconds(1));
+  std::this_thread::sleep_for(std::chrono::seconds(1));
 }
 
-string Service::charToString(char symbol) {
-  string temp(1, symbol);
+std::string Service::charToString(char symbol) {
+  std::string temp(1, symbol);
   return temp;
 }
 
@@ -43,21 +41,21 @@ short Service::getAlphabetIndex(char letter) {
     return -1;
 }
 
-short Service::getNumber(string message) {
+short Service::getNumber(std::string message) {
   short result;
 
   while (true) {
-    cout << message;
+    std::cout << message;
 
-    cin >> result;
+    std::cin >> result;
 
-    if (cin.fail()) {
-      cin.clear();
-      cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    if (std::cin.fail()) {
+      std::cin.clear();
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 
     else {
-      cin.ignore(numeric_limits<streamsize>::max(), '\n');
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
       break;
     }
   }
@@ -65,8 +63,8 @@ short Service::getNumber(string message) {
   return result;
 }
 
-void Service::openPageInBrowser(string page) {
-  string command;
+void Service::openPageInBrowser(std::string page) {
+  std::string command;
 
 #if defined(_WIN32) || defined(_WIN64)
   command = "start " + page;

@@ -11,11 +11,10 @@
 #include <string>
 
 using json = nlohmann::json;
-using namespace std;
 
 json Auth::user = json::object();
 
-void Auth::render(string error) {
+void Auth::render(std::string error) {
   Service service;
   Http http;
   Game game;
@@ -24,25 +23,25 @@ void Auth::render(string error) {
     service.clear();
 
     if (!error.empty()) {
-      cout << error << endl;
-      cout << endl;
+      std::cout << error << std::endl;
+      std::cout << std::endl;
     }
 
-    string email;
-    string username;
-    string password;
-    string confirm_password;
+    std::string email;
+    std::string username;
+    std::string password;
+    std::string confirm_password;
 
-    vector<string> options = {"Sing In", "Sign Up"};
+    std::vector<std::string> options = {"Sing In", "Sign Up"};
     short choice = service.select(options);
 
     service.clear();
     if (choice == 1) {
-      cout << "Enter your email: ";
-      cin >> email;
+      std::cout << "Enter your email: ";
+      std::cin >> email;
 
-      cout << "Enter your password: ";
-      cin >> password;
+      std::cout << "Enter your password: ";
+      std::cin >> password;
 
       if (sign_in(email, password)) {
         game.menu();
@@ -58,18 +57,18 @@ void Auth::render(string error) {
       bool passwords_match = false;
       short attempts = 3;
 
-      cout << "Change email: ";
-      cin >> email;
+      std::cout << "Change email: ";
+      std::cin >> email;
 
-      cout << "Change username: ";
-      cin >> username;
+      std::cout << "Change username: ";
+      std::cin >> username;
 
       while (!passwords_match && attempts > 0) {
-        cout << "Create password: ";
-        cin >> password;
+        std::cout << "Create password: ";
+        std::cin >> password;
 
-        cout << "Confirm password: ";
-        cin >> confirm_password;
+        std::cout << "Confirm password: ";
+        std::cin >> confirm_password;
 
         if (validate_password(password, confirm_password)) {
           passwords_match = true;
@@ -88,7 +87,7 @@ void Auth::render(string error) {
         else {
           attempts--;
           error = "Passwords do not match! Remaining attempts: " +
-                  to_string(attempts);
+                  std::to_string(attempts);
 
           if (attempts <= 0) {
             error = "Too many attempts. Please try again.";
@@ -104,38 +103,40 @@ void Auth::render(string error) {
   curl_global_cleanup();
 }
 
-bool Auth::validate_password(string password, string confirm_password) {
+bool Auth::validate_password(std::string password,
+                             std::string confirm_password) {
   return password == confirm_password;
 }
 
-bool Auth::sign_up(string email, string username, string password) {
+bool Auth::sign_up(std::string email, std::string username,
+                   std::string password) {
   Http http;
-  string fields =
+  std::string fields =
       "email=" + email + "&username=" + username + "&password=" + password;
 
-  string res = http.request("/auth/register", fields);
+  std::string res = http.request("/auth/register", fields);
 
   json data = json::parse(res);
 
   return this->successRequestCallback(res);
 }
 
-bool Auth::sign_in(string email, string password) {
+bool Auth::sign_in(std::string email, std::string password) {
   Http http;
-  string fields = "email=" + email + "&password=" + password;
+  std::string fields = "email=" + email + "&password=" + password;
 
-  string res = http.request("/auth/login", fields);
+  std::string res = http.request("/auth/login", fields);
 
   json data = json::parse(res);
 
   return this->successRequestCallback(res);
 }
 
-void Auth::writeRefreshToken(string token) {
-  ofstream tokenFile("token.txt");
+void Auth::writeRefreshToken(std::string token) {
+  std::ofstream tokenFile("token.txt");
 
   if (tokenFile) {
-    tokenFile << token << endl;
+    tokenFile << token << std::endl;
   }
 }
 
@@ -148,15 +149,15 @@ bool Auth::successAuthCallback(json data) {
 
 bool Auth::refresh() {
   Http http;
-  string refreshToken = this->getRefreshToken();
+  std::string refreshToken = this->getRefreshToken();
 
-  string fields = "refreshToken=" + refreshToken;
-  string res = http.request("/auth/refresh", fields);
+  std::string fields = "refreshToken=" + refreshToken;
+  std::string res = http.request("/auth/refresh", fields);
 
   return this->successRequestCallback(res);
 }
 
-bool Auth::successRequestCallback(string res) {
+bool Auth::successRequestCallback(std::string res) {
   try {
     json data = json::parse(res);
 
@@ -167,15 +168,15 @@ bool Auth::successRequestCallback(string res) {
   }
 
   catch (const json::parse_error &e) {
-    cout << "JSON parse error: " << e.what() << endl;
+    std::cout << "JSON parse error: " << e.what() << std::endl;
     return false;
   }
 }
 
-string Auth::getRefreshToken() {
-  string refreshToken;
+std::string Auth::getRefreshToken() {
+  std::string refreshToken;
 
-  ifstream tokenFile("token.txt");
+  std::ifstream tokenFile("token.txt");
 
   if (tokenFile.is_open()) {
     getline(tokenFile, refreshToken);
@@ -187,9 +188,9 @@ string Auth::getRefreshToken() {
 
 void Auth::logout() {
   Http http;
-  string refreshToken = this->getRefreshToken();
+  std::string refreshToken = this->getRefreshToken();
 
-  string fields = "refreshToken=" + refreshToken;
+  std::string fields = "refreshToken=" + refreshToken;
   http.request("/auth/logout", fields);
 
   remove("token.txt");

@@ -2,14 +2,12 @@
 
 #include <string>
 
-using namespace std;
-
 class Game {
 public:
-  static string opponent;
-  static string color;
+  static std::string opponent;
+  static std::string color;
   static bool isYourMove;
-  static string chessboard[8][8];
+  static std::string chessboard[8][8];
   static bool isNeedToFinishAGame;
 
   void mode();

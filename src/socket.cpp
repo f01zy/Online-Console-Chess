@@ -11,7 +11,6 @@
 #include <string>
 #include <vector>
 
-using namespace std;
 using namespace sio;
 
 void findOpponent(sio::event &event) {
@@ -19,7 +18,7 @@ void findOpponent(sio::event &event) {
   auto first = data[0]->get_vector();
   auto second = data[1]->get_vector();
 
-  string username = Auth::user["username"];
+  std::string username = Auth::user["username"];
   short opponentIndex = -1;
 
   if (first[0]->get_string() == username) {
@@ -31,7 +30,7 @@ void findOpponent(sio::event &event) {
   }
 
   if (opponentIndex != -1) {
-    string color = data[opponentIndex]->get_vector()[1]->get_string();
+    std::string color = data[opponentIndex]->get_vector()[1]->get_string();
 
     Game::opponent = data[opponentIndex]->get_vector()[0]->get_string();
     Game::color = color;
@@ -45,8 +44,8 @@ void moveEvent(sio::event &event) {
   Board board;
 
   auto data = event.get_message()->get_vector();
-  string username = data[0]->get_string();
-  string move = data[1]->get_string();
+  std::string username = data[0]->get_string();
+  std::string move = data[1]->get_string();
 
   if (Game::opponent == username) {
     board.move(move);
@@ -57,13 +56,13 @@ void moveEvent(sio::event &event) {
 void opponentLose(sio::event &event) {
   Service service;
 
-  string username = event.get_message()->get_string();
+  std::string username = event.get_message()->get_string();
 
   if (username == Game::opponent)
     Game::isNeedToFinishAGame = true;
 }
 
-Socket::Socket(string url) {
+Socket::Socket(std::string url) {
   Service service;
 
   this->on("findOpponent", findOpponent);
@@ -77,8 +76,10 @@ Socket::Socket(string url) {
 
 Socket::~Socket() { c.socket()->close(); }
 
-void Socket::send(string event, string data) { c.socket()->emit(event, data); }
+void Socket::send(std::string event, std::string data) {
+  c.socket()->emit(event, data);
+}
 
-void Socket::on(string event, function<void(sio::event &)> callback) {
+void Socket::on(std::string event, std::function<void(sio::event &)> callback) {
   c.socket()->on(event, callback);
 }

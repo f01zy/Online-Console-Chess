@@ -4,12 +4,10 @@
 
 #include <vector>
 
-using namespace std;
-
 class Elephant : public Figure {
 public:
   short points = 3;
-  static bool validate(string board[8][8], vector<short> c) {
+  static bool validate(std::string board[8][8], std::vector<short> c) {
     if (abs(c[0] - c[2]) != abs(c[1] - c[3]))
       return false;
 

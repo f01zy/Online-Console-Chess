@@ -1,6 +1,8 @@
 #include "../include/globals.h"
 
-string API_URL = "";
+#include "string"
 
-string getApiUrl() { return API_URL; }
-void setApiUrl(string url) { API_URL = url; }
+std::string API_URL = "";
+
+std::string getApiUrl() { return API_URL; }
+void setApiUrl(std::string url) { API_URL = url; }

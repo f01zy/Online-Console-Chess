@@ -4,12 +4,10 @@
 
 #include <vector>
 
-using namespace std;
-
 class Pawn : public Figure {
 public:
   short points = 1;
-  static bool validate(string board[8][8], vector<short> c) {
+  static bool validate(std::string board[8][8], std::vector<short> c) {
     char opponentColor = Game::color == "white" ? 'b' : 'w';
 
     short maxAdvance = (c[1] == 6 || c[1] == 1) ? 2 : 1;

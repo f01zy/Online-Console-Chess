@@ -2,10 +2,8 @@
 
 #include <string>
 
-using namespace std;
-
 class Board {
 public:
-  void render(string error = "");
-  void move(string c);
+  void render(std::string error = "");
+  void move(std::string c);
 };

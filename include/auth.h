@@ -4,20 +4,19 @@
 #include <string>
 
 using json = nlohmann::json;
-using namespace std;
 
 class Auth {
 public:
   static json user;
 
-  string getRefreshToken();
+  std::string getRefreshToken();
   bool refresh();
   void logout();
-  void render(string error = "");
-  bool successRequestCallback(string res);
+  void render(std::string error = "");
+  bool successRequestCallback(std::string res);
   bool successAuthCallback(json data);
-  void writeRefreshToken(string token);
-  bool sign_up(string email, string username, string password);
-  bool sign_in(string email, string password);
-  bool validate_password(string password, string confirm_password);
+  void writeRefreshToken(std::string token);
+  bool sign_up(std::string email, std::string username, std::string password);
+  bool sign_in(std::string email, std::string password);
+  bool validate_password(std::string password, std::string confirm_password);
 };

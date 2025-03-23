@@ -4,12 +4,10 @@
 
 #include <vector>
 
-using namespace std;
-
 class Rook : public Figure {
 public:
   short points = 5;
-  static bool validate(string board[8][8], vector<short> c) {
+  static bool validate(std::string board[8][8], std::vector<short> c) {
     if (c[1] != c[3] && c[0] != c[2])
       return false;
 

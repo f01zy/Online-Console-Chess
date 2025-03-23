@@ -16,22 +16,22 @@
 #include <unordered_map>
 #include <vector>
 
-using namespace std;
-
-unordered_map<string, function<bool(string[8][8], vector<short>)>>
+std::unordered_map<std::string,
+                   std::function<bool(std::string[8][8], std::vector<short>)>>
     Figures::validateFunctions = {
         {"P", Pawn::validate},     {"K", King::validate},
         {"Q", Queen::validate},    {"R", Rook::validate},
         {"B", Elephant::validate}, {"N", Horse::validate}};
 
-vector<short> Figures::getCoordinates(string coordinates) {
+std::vector<short> Figures::getCoordinates(std::string coordinates) {
   Service service;
 
   if (!this->validateCoordinates(coordinates))
     return {};
 
-  string from = coordinates.substr(0, coordinates.find("-"));
-  string to = coordinates.substr(coordinates.find("-") + 1, coordinates.size());
+  std::string from = coordinates.substr(0, coordinates.find("-"));
+  std::string to =
+      coordinates.substr(coordinates.find("-") + 1, coordinates.size());
 
   short fromYStoi;
   short toYStoi;
@@ -41,13 +41,13 @@ vector<short> Figures::getCoordinates(string coordinates) {
     toYStoi = stoi(service.charToString(to[1]));
 
     if (fromYStoi < 0 || fromYStoi > 8)
-      throw invalid_argument("");
+      throw std::invalid_argument("");
 
     if (toYStoi < 0 || toYStoi > 8)
-      throw invalid_argument("");
+      throw std::invalid_argument("");
   }
 
-  catch (invalid_argument &err) {
+  catch (std::invalid_argument &err) {
     return {};
   }
 
@@ -61,11 +61,11 @@ vector<short> Figures::getCoordinates(string coordinates) {
 
 bool Figures::isLetter(char letter) { return std::isalpha(letter); }
 
-bool Figures::requiredMoveValidate(vector<short> coordinates) {
+bool Figures::requiredMoveValidate(std::vector<short> coordinates) {
   Game game;
 
-  string fromFigure = Game::chessboard[coordinates[1]][coordinates[0]];
-  string toFigure = Game::chessboard[coordinates[3]][coordinates[2]];
+  std::string fromFigure = Game::chessboard[coordinates[1]][coordinates[0]];
+  std::string toFigure = Game::chessboard[coordinates[3]][coordinates[2]];
 
   if (fromFigure[0] != Game::color[0] || toFigure[0] == Game::color[0])
     return false;
@@ -76,7 +76,7 @@ bool Figures::requiredMoveValidate(vector<short> coordinates) {
   return true;
 }
 
-bool Figures::validateCoordinates(string coordinates) {
+bool Figures::validateCoordinates(std::string coordinates) {
   if (coordinates.size() != 5 || coordinates[2] != '-')
     return false;
 
@@ -89,31 +89,31 @@ bool Figures::validateCoordinates(string coordinates) {
   return true;
 }
 
-bool Figures::validateMove(vector<short> coordinates) {
+bool Figures::validateMove(std::vector<short> coordinates) {
   Service service;
 
   if (coordinates.size() == 0)
     return false;
 
-  string figure(1, Game::chessboard[coordinates[1]][coordinates[0]][1]);
+  std::string figure(1, Game::chessboard[coordinates[1]][coordinates[0]][1]);
 
   return this->validateFunctions[figure](Game::chessboard, coordinates) &&
          this->requiredMoveValidate(coordinates);
 }
 
-bool Figures::check(string board[8][8]) {
-  string color(1, Game::color[0]);
-  vector<short> king = this->findFigure(board, color + "K");
+bool Figures::check(std::string board[8][8]) {
+  std::string color(1, Game::color[0]);
+  std::vector<short> king = this->findFigure(board, color + "K");
 
   for (short i = 0; i < 8; i++) {
     for (short j = 0; j < 8; j++) {
-      string v = board[i][j];
+      std::string v = board[i][j];
 
       if (v == "  " || v[0] == color[0])
         continue;
 
-      string figure(1, v[1]);
-      vector<short> move = {j, i, king[0], king[1]};
+      std::string figure(1, v[1]);
+      std::vector<short> move = {j, i, king[0], king[1]};
 
       if (this->validateFunctions[figure](board, move)) {
         return true;
@@ -124,10 +124,10 @@ bool Figures::check(string board[8][8]) {
   return false;
 }
 
-bool Figures::checkCheckAfterMove(vector<short> c) {
+bool Figures::checkCheckAfterMove(std::vector<short> c) {
   Service service;
 
-  string tempBoard[8][8];
+  std::string tempBoard[8][8];
 
   for (short i = 0; i < 8; i++)
     for (short j = 0; j < 8; j++)
@@ -139,7 +139,7 @@ bool Figures::checkCheckAfterMove(vector<short> c) {
   return this->check(tempBoard);
 }
 
-bool Figures::checkmate(string board[8][8]) {
+bool Figures::checkmate(std::string board[8][8]) {
   Service service;
 
   if (!this->check(board)) {
@@ -148,16 +148,16 @@ bool Figures::checkmate(string board[8][8]) {
 
   for (short i = 0; i < 8; i++) {
     for (short j = 0; j < 8; j++) {
-      string v = board[i][j];
+      std::string v = board[i][j];
 
       if (v == "  " || v[0] != Game::color[0])
         continue;
 
-      string figure(1, v[1]);
+      std::string figure(1, v[1]);
 
       for (short k = 0; k < 8; k++) {
         for (short n = 0; n < 8; n++) {
-          vector<short> coordinates = {j, i, n, k};
+          std::vector<short> coordinates = {j, i, n, k};
 
           if (!this->validateFunctions[figure](board, coordinates))
             continue;
@@ -175,7 +175,8 @@ bool Figures::checkmate(string board[8][8]) {
   return true;
 }
 
-vector<short> Figures::findFigure(string board[8][8], string figure) {
+std::vector<short> Figures::findFigure(std::string board[8][8],
+                                       std::string figure) {
   for (short i = 0; i < 8; i++)
     for (short j = 0; j < 8; j++)
       if (board[i][j] == figure)

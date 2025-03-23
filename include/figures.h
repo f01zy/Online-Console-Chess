@@ -5,22 +5,21 @@
 #include <unordered_map>
 #include <vector>
 
-using namespace std;
-
 class Figures {
 public:
-  static unordered_map<string, function<bool(string[8][8], vector<short>)>>
+  static std::unordered_map<
+      std::string, std::function<bool(std::string[8][8], std::vector<short>)>>
       validateFunctions;
 
-  vector<short> getCoordinates(string coordinates);
+  std::vector<short> getCoordinates(std::string coordinates);
   bool isLetter(char letter);
-  vector<short> findFigure(string board[8][8], string figure);
+  std::vector<short> findFigure(std::string board[8][8], std::string figure);
 
-  bool validateMove(vector<short> coordinates);
-  bool validateCoordinates(string coordinates);
-  bool requiredMoveValidate(vector<short> coordinates);
+  bool validateMove(std::vector<short> coordinates);
+  bool validateCoordinates(std::string coordinates);
+  bool requiredMoveValidate(std::vector<short> coordinates);
 
-  bool check(string board[8][8]);
-  bool checkCheckAfterMove(vector<short> c);
-  bool checkmate(string board[8][8]);
+  bool check(std::string board[8][8]);
+  bool checkCheckAfterMove(std::vector<short> c);
+  bool checkmate(std::string board[8][8]);
 };

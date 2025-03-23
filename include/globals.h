@@ -2,14 +2,12 @@
 #include <string>
 #include <unordered_map>
 
-using namespace std;
+extern std::string API_URL;
 
-extern string API_URL;
+std::string getApiUrl();
+void setApiUrl(std::string url);
 
-string getApiUrl();
-void setApiUrl(string url);
+const std::string DEVELOPMENT_URL = "http://localhost:3000";
+const std::string PRODUCTION_URL = "http://77.95.201.197:3000";
 
-const string DEVELOPMENT_URL = "http://localhost:3000";
-const string PRODUCTION_URL = "http://77.95.201.197:3000";
-
-const string GITHUB = "https://github.com/f01zy/Online-Console-Chess";
+const std::string GITHUB = "https://github.com/f01zy/Online-Console-Chess";

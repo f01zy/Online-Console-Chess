@@ -8,24 +8,22 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
-const unordered_map<string, string> figures = {
+const std::unordered_map<std::string, std::string> figures = {
     {"wK", "♚"}, {"wQ", "♛"}, {"wR", "♜"}, {"wN", "♞"},
     {"wB", "♝"}, {"wP", "♟"}, {"bK", "♔"}, {"bQ", "♕"},
     {"bN", "♘"}, {"bR", "♖"}, {"bP", "♙"}, {"bB", "♗"},
 };
 
-void Board::render(string error) {
+void Board::render(std::string error) {
   Service service;
   service.clear();
 
-  string board[8][8];
-  vector<char> letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+  std::string board[8][8];
+  std::vector<char> letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
   if (error.size() > 0) {
-    cout << error << endl;
-    cout << endl;
+    std::cout << error << std::endl;
+    std::cout << std::endl;
   }
 
   for (short i = 0; i < 8; i++) {
@@ -50,9 +48,9 @@ void Board::render(string error) {
     if (Game::color == "black")
       number = i + 1;
 
-    cout << number;
+    std::cout << number;
     for (short j = 0; j < 8; j++) {
-      string figure;
+      std::string figure;
 
       if (board[i][j] == "  ")
         figure = " ";
@@ -60,12 +58,12 @@ void Board::render(string error) {
       else
         figure = figures.at(board[i][j]);
 
-      cout << " " << figure;
+      std::cout << " " << figure;
     }
-    cout << endl;
+    std::cout << std::endl;
   }
 
-  cout << " ";
+  std::cout << " ";
   for (short i = 0; i < letters.size(); i++) {
     short index;
     if (Game::color == "white")
@@ -74,21 +72,21 @@ void Board::render(string error) {
     else
       index = letters.size() - 1 - i;
 
-    cout << " " << letters[index];
+    std::cout << " " << letters[index];
   }
-  cout << endl;
+  std::cout << std::endl;
 }
 
-void Board::move(string c) {
+void Board::move(std::string c) {
   Figures figures;
   Game game;
 
-  vector coordinates = figures.getCoordinates(c);
+  std::vector coordinates = figures.getCoordinates(c);
 
   if (coordinates.size() == 0)
     return;
 
-  string figure = Game::chessboard[coordinates[1]][coordinates[0]];
+  std::string figure = Game::chessboard[coordinates[1]][coordinates[0]];
 
   Game::chessboard[coordinates[1]][coordinates[0]] = "  ";
   Game::chessboard[coordinates[3]][coordinates[2]] = figure;

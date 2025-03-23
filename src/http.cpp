@@ -5,25 +5,23 @@
 #include <curl/easy.h>
 #include <string>
 
-using namespace std;
-
 size_t Http::WriteCallback(void *contents, size_t size, size_t nmemb,
                            void *userp) {
   ((std::string *)userp)->append((char *)contents, size * nmemb);
   return size * nmemb;
 }
 
-string Http::request(string endpoint, string data) {
+std::string Http::request(std::string endpoint, std::string data) {
   CURL *curl;
   CURLcode res;
-  string readBuffer;
+  std::string readBuffer;
 
   curl_global_init(CURL_GLOBAL_DEFAULT);
 
   curl = curl_easy_init();
 
   if (curl) {
-    string url = getApiUrl() + "/api/v1" + endpoint;
+    std::string url = getApiUrl() + "/api/v1" + endpoint;
 
     if (data.size() > 0) {
       struct curl_slist *headers = NULL;

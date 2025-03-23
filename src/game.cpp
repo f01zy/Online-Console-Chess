@@ -11,19 +11,17 @@
 #include <string>
 #include <vector>
 
-using namespace std;
-
-string Game::opponent = "";
-string Game::color = "";
+std::string Game::opponent = "";
+std::string Game::color = "";
 bool Game::isYourMove = false;
-string Game::chessboard[8][8] = {};
+std::string Game::chessboard[8][8] = {};
 bool Game::isNeedToFinishAGame = false;
 
 void Game::mode() {
   Service service;
   service.clear();
 
-  vector<string> options = {"Online", "Local"};
+  std::vector<std::string> options = {"Online", "Local"};
   short choice = service.select(options);
 
   switch (choice) {
@@ -47,7 +45,8 @@ void Game::menu() {
 
   service.clear();
 
-  vector<string> options = {"Online game", "Github", "Log out", "Exit"};
+  std::vector<std::string> options = {"Online game", "Github", "Log out",
+                                      "Exit"};
   short choice = service.select(options);
 
   switch (choice) {
@@ -114,7 +113,7 @@ void Game::play() {
 }
 
 void Game::initChessboard() {
-  string board[8][8] = {
+  std::string board[8][8] = {
       {"bR", "bN", "bB", "bQ", "bK", "bB", "bN", "bR"},
       {"bP", "bP", "bP", "bP", "bP", "bP", "bP", "bP"},
       {"  ", "  ", "  ", "  ", "  ", "  ", "  ", "  "},
@@ -136,13 +135,13 @@ void Game::move() {
   Board board;
   Service service;
 
-  string username = Auth::user["username"];
+  std::string username = Auth::user["username"];
 
-  cout << endl;
-  cout << "Coordinates: ";
+  std::cout << std::endl;
+  std::cout << "Coordinates: ";
 
-  string coordinates;
-  cin >> coordinates;
+  std::string coordinates;
+  std::cin >> coordinates;
 
   if (!figures.validateMove(figures.getCoordinates(coordinates))) {
     service.clear();
@@ -154,7 +153,7 @@ void Game::move() {
 
   Game::isYourMove = false;
 
-  string data = username + " " + coordinates;
+  std::string data = username + " " + coordinates;
   socket.send("move", data);
 }
 
@@ -167,8 +166,8 @@ void Game::waiting() {
   while (this->opponent.size() == 0) {
     service.clear();
     Socket &socket = Socket::getInstance();
-    string username = Auth::user["username"];
-    string wait = "";
+    std::string username = Auth::user["username"];
+    std::string wait = "";
 
     for (short i = 0; i < state; i++)
       wait += waitChar;
@@ -178,7 +177,7 @@ void Game::waiting() {
     else
       state++;
 
-    cout << "Waiting" << wait << endl;
+    std::cout << "Waiting" << wait << std::endl;
 
     service.sleep(1);
   }
@@ -189,7 +188,7 @@ void Game::waiting() {
 void Game::searchOpponent() {
   Socket &socket = Socket::getInstance();
 
-  string username = Auth::user["username"];
+  std::string username = Auth::user["username"];
   socket.send("searchOpponent", username);
 
   this->waiting();
@@ -198,7 +197,7 @@ void Game::searchOpponent() {
 void Game::mate() {
   Socket &socket = Socket::getInstance();
 
-  string username = Auth::user["username"];
+  std::string username = Auth::user["username"];
   socket.send("lose", username);
 
   Game::isNeedToFinishAGame = true;
