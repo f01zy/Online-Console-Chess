@@ -1,13 +1,13 @@
-#include "../include/figures.h"
-#include "../include/game.h"
-#include "../include/service.h"
+#include "../../include/figures.h"
+#include "../../include/game.h"
+#include "../../include/service.h"
 
-#include "../include/figures/elephant.h"
-#include "../include/figures/horse.h"
-#include "../include/figures/king.h"
-#include "../include/figures/pawn.h"
-#include "../include/figures/queen.h"
-#include "../include/figures/rook.h"
+#include "../../include/figures/elephant.h"
+#include "../../include/figures/horse.h"
+#include "../../include/figures/king.h"
+#include "../../include/figures/pawn.h"
+#include "../../include/figures/queen.h"
+#include "../../include/figures/rook.h"
 
 #include <cctype>
 #include <functional>

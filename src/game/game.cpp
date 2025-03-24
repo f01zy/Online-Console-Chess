@@ -1,10 +1,10 @@
-#include "../include/game.h"
-#include "../include/auth.h"
-#include "../include/board.h"
-#include "../include/figures.h"
-#include "../include/globals.h"
-#include "../include/service.h"
-#include "../include/socket.h"
+#include "../../include/game.h"
+#include "../../include/auth.h"
+#include "../../include/board.h"
+#include "../../include/figures.h"
+#include "../../include/globals.h"
+#include "../../include/service.h"
+#include "../../include/socket.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -78,9 +78,9 @@ void Game::start() {
   Auth auth;
   Game game;
 
-  bool isAuth = auth.refresh();
+  std::string isAuth = auth.refresh();
 
-  if (!isAuth)
+  if (isAuth.size() > 0)
     auth.render();
 
   else

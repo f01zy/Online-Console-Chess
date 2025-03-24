@@ -1,5 +1,5 @@
-#include "../include/http.h"
-#include "../include/globals.h"
+#include "../../include/http.h"
+#include "../../include/globals.h"
 
 #include <curl/curl.h>
 #include <curl/easy.h>

@@ -1,8 +1,8 @@
-#include "../include/socket.h"
-#include "../include/auth.h"
-#include "../include/board.h"
-#include "../include/game.h"
-#include "../include/service.h"
+#include "../../include/socket.h"
+#include "../../include/auth.h"
+#include "../../include/board.h"
+#include "../../include/game.h"
+#include "../../include/service.h"
 
 #include <cstdlib>
 #include <functional>

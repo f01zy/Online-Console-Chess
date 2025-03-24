@@ -1,7 +1,7 @@
-#include "../include/board.h"
-#include "../include/figures.h"
-#include "../include/game.h"
-#include "../include/service.h"
+#include "../../include/board.h"
+#include "../../include/figures.h"
+#include "../../include/game.h"
+#include "../../include/service.h"
 
 #include <algorithm>
 #include <iostream>
