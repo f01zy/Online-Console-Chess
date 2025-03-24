@@ -1,36 +1,44 @@
 import type { Server } from "socket.io";
 import { randomNumber } from "../utils/random.utils";
 import { logger } from "../utils/logger.utils";
+import { prisma } from "../prisma";
 
-type color = "black" | "white"
+type TColor = "black" | "white"
+type TPartyUser = [string, TColor, string]
+type TParty = [TPartyUser, TPartyUser]
 
-type partyUser = [string, color, string]
-type party = [partyUser, partyUser]
-
-const colors: [color, color] = ["black", "white"]
-
+const colors: [TColor, TColor] = ["black", "white"]
 let waiting: Array<[string, string]> = []
-let parties: Array<party> = []
+let parties: Array<TParty> = []
 
 export const loadIoListeners = (io: Server) => {
-  const userLeave = (id: string) => {
+  const userLeave = async (id: string) => {
     waiting = waiting.filter(i => i[1] != id)
 
-    let username: string | undefined
+    let thisParty: TParty | undefined;
 
     parties = parties.filter(party => {
       const userExists = party.some(user => user[2] === id)
 
       if (userExists) {
-        username = party.find(user => user[2] === id)?.[0]
+        thisParty = party;
         return false
       }
 
       return true
     })
 
-    if (username)
-      io.emit("opponentLose", username);
+    if (thisParty) {
+      const user = await prisma.user.findFirst({ where: { username: thisParty[0][0] } })
+      const opponent = await prisma.user.findFirst({ where: { username: thisParty[1][0] } })
+
+      if (user && opponent) {
+        user.rating -= 8;
+        opponent.rating += 8;
+      }
+
+      io.emit("opponentLose", thisParty[0][0]);
+    }
   }
 
   io.on("connection", (socket) => {
@@ -48,9 +56,9 @@ export const loadIoListeners = (io: Server) => {
 
         const colorIndex = randomNumber(0, 1);
         const color = colors[colorIndex]
-        const opponentColor: color = color === "white" ? "black" : "white"
+        const opponentColor: TColor = color === "white" ? "black" : "white"
 
-        const data: party = [
+        const data: TParty = [
           [username, color, socket.id],
           [opponent[0], opponentColor, opponent[1]]
         ];
