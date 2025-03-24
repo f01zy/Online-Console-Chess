@@ -1,25 +1,18 @@
 #include "../../include/service.h"
 
+#include "ftxui/component/component.hpp"
+#include "ftxui/component/component_options.hpp"
+#include "ftxui/component/screen_interactive.hpp"
 #include <cctype>
 #include <chrono>
 #include <cstdlib>
+#include <ftxui/dom/elements.hpp>
 #include <iostream>
+#include <string>
 #include <thread>
 #include <vector>
 
-short Service::select(std::vector<std::string> options) {
-  for (short i = 0; i < options.size(); i++) {
-    std::cout << options[i] << " (" << i + 1 << ")" << std::endl;
-  }
-
-  std::cout << std::endl;
-  short choice = this->getNumber("Your choice: ");
-
-  if (choice > options.size() + 1)
-    return -1;
-
-  return choice;
-}
+using namespace ftxui;
 
 void Service::clear() { system("clear"); }
 void Service::sleep(short seconds) {
@@ -41,28 +34,6 @@ short Service::getAlphabetIndex(char letter) {
     return -1;
 }
 
-short Service::getNumber(std::string message) {
-  short result;
-
-  while (true) {
-    std::cout << message;
-
-    std::cin >> result;
-
-    if (std::cin.fail()) {
-      std::cin.clear();
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    }
-
-    else {
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-      break;
-    }
-  }
-
-  return result;
-}
-
 void Service::openPageInBrowser(std::string page) {
   std::string command;
 
@@ -75,4 +46,29 @@ void Service::openPageInBrowser(std::string page) {
 #endif
 
   system(command.c_str());
+}
+
+short Service::menu(std::vector<std::string> options, std::string message) {
+  auto screen = ScreenInteractive::Fullscreen();
+  int selected = 0;
+
+  auto menu = Menu(&options, &selected);
+
+  auto component = CatchEvent(menu, [&](Event event) {
+    if (event == Event::Return) {
+      screen.Exit();
+      return true;
+    }
+    return false;
+  });
+
+  auto renderer = Renderer(component, [&] {
+    return center(vcenter(vbox(text(message) | bold,
+                               filler() | size(HEIGHT, EQUAL, 1),
+                               component->Render()))) |
+           bgcolor(Color::Black);
+  });
+
+  screen.Loop(renderer);
+  return selected;
 }

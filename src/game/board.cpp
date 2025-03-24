@@ -14,12 +14,26 @@ const std::unordered_map<std::string, std::string> figures = {
     {"bN", "♘"}, {"bR", "♖"}, {"bP", "♙"}, {"bB", "♗"},
 };
 
+std::vector<char> letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+
+void Board::printLetters() {
+  for (short i = 0; i < letters.size(); i++) {
+    short index;
+    if (Game::color == "white")
+      index = i;
+
+    else
+      index = letters.size() - 1 - i;
+
+    std::cout << " " << letters[index];
+  }
+}
+
 void Board::render(std::string error) {
   Service service;
   service.clear();
 
   std::string board[8][8];
-  std::vector<char> letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
   if (error.size() > 0) {
     std::cout << error << std::endl;
@@ -42,6 +56,10 @@ void Board::render(std::string error) {
     }
   }
 
+  std::cout << " ";
+  this->printLetters();
+  std::cout << std::endl;
+
   for (short i = 0; i < 8; i++) {
     short number = 8 - i;
 
@@ -60,20 +78,12 @@ void Board::render(std::string error) {
 
       std::cout << " " << figure;
     }
+    std::cout << " " << number;
     std::cout << std::endl;
   }
 
   std::cout << " ";
-  for (short i = 0; i < letters.size(); i++) {
-    short index;
-    if (Game::color == "white")
-      index = i;
-
-    else
-      index = letters.size() - 1 - i;
-
-    std::cout << " " << letters[index];
-  }
+  this->printLetters();
   std::cout << std::endl;
 }
 

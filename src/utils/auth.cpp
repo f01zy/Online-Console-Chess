@@ -52,16 +52,27 @@ void Auth::render(std::string error) {
       return input->Render() | size(WIDTH, EQUAL, input_width);
     };
 
+    auto screen = ScreenInteractive::Fullscreen();
+
     std::vector<std::string> options = {"Sing In", "Sign Up"};
-    short choice = service.select(options);
+    short choice =
+        service.menu(options, error.size() == 0 ? "Authentication" : error);
 
     service.clear();
-    if (choice == 1) {
+    if (choice == 0) {
       auto component = Container::Vertical({inputEmail, inputPassword});
 
-      auto renderer = Renderer(component, [&] {
+      auto handleEnter = CatchEvent(component, [&](Event event) {
+        if (event == Event::Return) {
+          screen.Exit();
+          return true;
+        }
+        return false;
+      });
+
+      auto renderer = Renderer(handleEnter, [&] {
         return center(vcenter(vbox({
-                   text("Type Ctrl+C to confirm") | color(Color::Yellow),
+                   text("Type Enter to confirm") | bold | color(Color::Yellow),
                    filler() | size(HEIGHT, EQUAL, 1),
                    hbox(text("Email    : "), fixedInput(inputEmail)),
                    hbox(text("Password : "), fixedInput(inputPassword)),
@@ -69,7 +80,6 @@ void Auth::render(std::string error) {
                bgcolor(Color::Black);
       });
 
-      auto screen = ScreenInteractive::Fullscreen();
       screen.Loop(renderer);
 
       std::string res = sign_in(email, password);
@@ -83,13 +93,21 @@ void Auth::render(std::string error) {
         error = res;
     }
 
-    else if (choice == 2) {
+    else if (choice == 1) {
       auto component = Container::Vertical(
           {inputEmail, inputUsername, inputPassword, inputConfirm});
 
-      auto renderer = Renderer(component, [&] {
+      auto handleEnter = CatchEvent(component, [&](Event event) {
+        if (event == Event::Return) {
+          screen.Exit();
+          return true;
+        }
+        return false;
+      });
+
+      auto renderer = Renderer(handleEnter, [&] {
         return center(vcenter(vbox({
-                   text("Type Ctrl+C to confirm") | color(Color::Yellow),
+                   text("Type Enter to confirm") | bold | color(Color::Yellow),
                    filler() | size(HEIGHT, EQUAL, 1),
                    hbox(text("Email            : "), fixedInput(inputEmail)),
                    hbox(text("Username         : "), fixedInput(inputUsername)),

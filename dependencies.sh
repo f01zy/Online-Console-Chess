@@ -5,34 +5,30 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-echo "Installing nlohmann/json"
-git clone https://github.com/nlohmann/json > /dev/null 2>&1
-cd json || exit 1
-mkdir build
+declare -A repos=(
+    ["FTXUI"]="https://github.com/ArthurSonzogni/FTXUI"
+    ["nlohmann/json"]="https://github.com/nlohmann/json"
+    ["socket.io-client-cpp"]="https://github.com/socketio/socket.io-client-cpp --recurse-submodules"
+)
 
-echo "Configuring socket.io-client-cpp with CMake..."
-cmake .. > /dev/null 2>&1
-
-echo "Building and installing socket.io-client-cpp..."
-make install > /dev/null 2>&1
-cd ../..
-rm -rf json
-
-echo "nlohmann/json installed successfully."
-
-echo "Installing socket.io-client-cpp..."
-git clone --recurse-submodules https://github.com/socketio/socket.io-client-cpp.git > /dev/null 2>&1
-cd socket.io-client-cpp || exit 1
-
-echo "Configuring socket.io-client-cpp with CMake..."
-cmake . > /dev/null 2>&1
-
-echo "Building and installing socket.io-client-cpp..."
-make install > /dev/null 2>&1
-cd ..
-rm -rf socket.io-client-cpp
-
-echo "socket.io-client-cpp installed successfully."
+for repo in "${!repos[@]}"; do
+    echo "Installing ${repo}..."
+    
+    git clone ${repos[$repo]} > /dev/null 2>&1
+    
+    dir=$(basename "${repo}")
+    cd "${dir}" || exit 1
+    
+    mkdir -p build && cd build
+    cmake .. > /dev/null 2>&1
+    make -j$(nproc) install > /dev/null 2>&1
+    
+    cd ../..
+    rm -rf "${dir}"
+    
+    echo "${repo} installed successfully."
+    echo "----------------------------------"
+done
 
 install_libcurl() {
     if [[ "$OSTYPE" == "linux-gnu"* ]]; then

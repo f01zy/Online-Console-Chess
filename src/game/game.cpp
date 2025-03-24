@@ -22,14 +22,14 @@ void Game::mode() {
   service.clear();
 
   std::vector<std::string> options = {"Online", "Local"};
-  short choice = service.select(options);
+  short choice = service.menu(options, "Game mode");
 
   switch (choice) {
-  case 1:
+  case 0:
     setApiUrl(PRODUCTION_URL);
     break;
 
-  case 2:
+  case 1:
     setApiUrl(DEVELOPMENT_URL);
     break;
 
@@ -47,23 +47,23 @@ void Game::menu() {
 
   std::vector<std::string> options = {"Online game", "Github", "Log out",
                                       "Exit"};
-  short choice = service.select(options);
+  short choice = service.menu(options, "Menu");
 
   switch (choice) {
-  case 1:
+  case 0:
     this->searchOpponent();
     break;
 
-  case 2:
+  case 1:
     service.openPageInBrowser(GITHUB);
     this->menu();
     break;
 
-  case 3:
+  case 2:
     auth.logout();
     break;
 
-  case 4:
+  case 3:
     exit(0);
 
   default:
