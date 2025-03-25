@@ -67,6 +67,7 @@ void Board::render(std::string error) {
       number = i + 1;
 
     std::cout << number;
+
     for (short j = 0; j < 8; j++) {
       std::string figure;
 
@@ -78,6 +79,7 @@ void Board::render(std::string error) {
 
       std::cout << " " << figure;
     }
+
     std::cout << " " << number;
     std::cout << std::endl;
   }

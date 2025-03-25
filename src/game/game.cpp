@@ -52,8 +52,8 @@ void Game::menu() {
 
   service.clear();
 
-  std::vector<std::string> options = {"Online game", "Profile", "Github",
-                                      "Log out", "Exit"};
+  std::vector<std::string> options = {"Online game", "Profile", "Log out",
+                                      "Exit", "Github"};
   short choice = service.menu(options, "Menu");
 
   switch (choice) {
@@ -66,16 +66,16 @@ void Game::menu() {
     break;
 
   case 2:
-    service.openPageInBrowser(GITHUB);
-    this->menu();
-    break;
-
-  case 3:
     auth.logout();
     break;
 
-  case 4:
+  case 3:
     exit(0);
+
+  case 4:
+    service.openPageInBrowser(GITHUB);
+    this->menu();
+    break;
 
   default:
     this->menu();
@@ -219,14 +219,14 @@ void Game::profile() {
 
   auto component = Renderer([&] {
     return center(vcenter(vbox(
-               {text("Profile") | bold | ftxui::color(Color::Yellow) | center,
+               {text("Profile") | bold | ftxui::color(Color::Yellow),
                 filler() | size(HEIGHT, EQUAL, 1),
                 text("ID       : " +
                      std::to_string(Auth::user["id"].get<int>())),
                 text("Email    : " + Auth::user["email"].get<std::string>()),
                 text("Username : " + Auth::user["username"].get<std::string>()),
                 filler() | size(HEIGHT, EQUAL, 1),
-                text("Press Backspace to go back") | dim | center}))) |
+                text("Press Backspace to go back") | dim}))) |
            bgcolor(Color::Black);
   });
 
