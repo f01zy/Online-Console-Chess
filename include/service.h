@@ -1,11 +1,7 @@
 #pragma once
 
-#include "ftxui/component/screen_interactive.hpp"
-
 #include <string>
 #include <vector>
-
-using namespace ftxui;
 
 class Service {
 public:

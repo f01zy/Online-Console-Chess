@@ -52,11 +52,11 @@ void Auth::render(std::string error) {
       return input->Render() | size(WIDTH, EQUAL, input_width);
     };
 
-    auto screen = ScreenInteractive::Fullscreen();
-
-    std::vector<std::string> options = {"Sing In", "Sign Up"};
+    std::vector<std::string> options = {"Sing In", "Sign Up", "Exit"};
     short choice =
         service.menu(options, error.size() == 0 ? "Authentication" : error);
+
+    auto screen = ScreenInteractive::Fullscreen();
 
     service.clear();
     if (choice == 0) {
@@ -117,7 +117,6 @@ void Auth::render(std::string error) {
                bgcolor(Color::Black);
       });
 
-      auto screen = ScreenInteractive::Fullscreen();
       screen.Loop(renderer);
 
       if (!validatePassword(password, confirm)) {
@@ -135,6 +134,9 @@ void Auth::render(std::string error) {
       else
         error = res;
     }
+
+    else if (choice == 2)
+      exit(0);
   } while (1);
 }
 

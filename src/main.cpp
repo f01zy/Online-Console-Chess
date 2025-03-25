@@ -5,6 +5,4 @@ int main() {
 
   game.mode();
   game.start();
-
-  return 0;
 }

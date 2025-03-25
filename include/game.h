@@ -20,4 +20,5 @@ public:
   void waiting();
   void readyToGame();
   void mate();
+  void profile();
 };

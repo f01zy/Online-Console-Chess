@@ -1,13 +1,11 @@
 #include "../../include/service.h"
 
 #include "ftxui/component/component.hpp"
-#include "ftxui/component/component_options.hpp"
 #include "ftxui/component/screen_interactive.hpp"
 #include <cctype>
 #include <chrono>
 #include <cstdlib>
 #include <ftxui/dom/elements.hpp>
-#include <iostream>
 #include <string>
 #include <thread>
 #include <vector>
@@ -63,7 +61,7 @@ short Service::menu(std::vector<std::string> options, std::string message) {
   });
 
   auto renderer = Renderer(component, [&] {
-    return center(vcenter(vbox(text(message) | bold,
+    return center(vcenter(vbox(text(message) | bold | color(Color::Yellow),
                                filler() | size(HEIGHT, EQUAL, 1),
                                component->Render()))) |
            bgcolor(Color::Black);

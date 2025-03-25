@@ -6,10 +6,16 @@
 #include "../../include/service.h"
 #include "../../include/socket.h"
 
+#include "ftxui/component/component.hpp"
+#include "ftxui/component/screen_interactive.hpp"
 #include <cstdlib>
+#include <ftxui/dom/elements.hpp>
+#include <ftxui/dom/table.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
+
+using namespace ftxui;
 
 std::string Game::opponent = "";
 std::string Game::color = "";
@@ -42,11 +48,12 @@ void Game::mode() {
 void Game::menu() {
   Service service;
   Auth auth;
+  Socket &socket = Socket::getInstance();
 
   service.clear();
 
-  std::vector<std::string> options = {"Online game", "Github", "Log out",
-                                      "Exit"};
+  std::vector<std::string> options = {"Online game", "Profile", "Github",
+                                      "Log out", "Exit"};
   short choice = service.menu(options, "Menu");
 
   switch (choice) {
@@ -55,15 +62,19 @@ void Game::menu() {
     break;
 
   case 1:
+    this->profile();
+    break;
+
+  case 2:
     service.openPageInBrowser(GITHUB);
     this->menu();
     break;
 
-  case 2:
+  case 3:
     auth.logout();
     break;
 
-  case 3:
+  case 4:
     exit(0);
 
   default:
@@ -201,4 +212,32 @@ void Game::mate() {
   socket.send("lose", username);
 
   Game::isNeedToFinishAGame = true;
+}
+
+void Game::profile() {
+  auto screen = ScreenInteractive::Fullscreen();
+
+  auto component = Renderer([&] {
+    return center(vcenter(vbox(
+               {text("Profile") | bold | ftxui::color(Color::Yellow) | center,
+                filler() | size(HEIGHT, EQUAL, 1),
+                text("ID       : " +
+                     std::to_string(Auth::user["id"].get<int>())),
+                text("Email    : " + Auth::user["email"].get<std::string>()),
+                text("Username : " + Auth::user["username"].get<std::string>()),
+                filler() | size(HEIGHT, EQUAL, 1),
+                text("Press Backspace to go back") | dim | center}))) |
+           bgcolor(Color::Black);
+  });
+
+  auto finalComponent = CatchEvent(component, [&](Event event) {
+    if (event == Event::Backspace) {
+      screen.Exit();
+      return true;
+    }
+    return false;
+  });
+
+  screen.Loop(finalComponent);
+  this->menu();
 }
