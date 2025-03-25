@@ -1,44 +1,35 @@
 import type { Server } from "socket.io";
 import { randomNumber } from "../utils/random.utils";
 import { logger } from "../utils/logger.utils";
-import { prisma } from "../prisma";
 
 type TColor = "black" | "white"
 type TPartyUser = [string, TColor, string]
 type TParty = [TPartyUser, TPartyUser]
 
 const colors: [TColor, TColor] = ["black", "white"]
+
 let waiting: Array<[string, string]> = []
 let parties: Array<TParty> = []
 
 export const loadIoListeners = (io: Server) => {
-  const userLeave = async (id: string) => {
+  const userLeave = (id: string) => {
     waiting = waiting.filter(i => i[1] != id)
 
-    let thisParty: TParty | undefined;
+    let username: string | undefined
 
     parties = parties.filter(party => {
       const userExists = party.some(user => user[2] === id)
 
       if (userExists) {
-        thisParty = party;
+        username = party.find(user => user[2] === id)?.[0]
         return false
       }
 
       return true
     })
 
-    if (thisParty) {
-      const user = await prisma.user.findFirst({ where: { username: thisParty[0][0] } })
-      const opponent = await prisma.user.findFirst({ where: { username: thisParty[1][0] } })
-
-      if (user && opponent) {
-        user.rating -= 8;
-        opponent.rating += 8;
-      }
-
-      io.emit("opponentLose", thisParty[0][0]);
-    }
+    if (username)
+      io.emit("opponentLose", username);
   }
 
   io.on("connection", (socket) => {

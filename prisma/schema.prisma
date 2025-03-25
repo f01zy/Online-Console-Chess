@@ -15,7 +15,6 @@ model User {
   activationCode String  @unique
   password       String
   Token          Token[]
-  rating         Int     @default(0)
 }
 
 model Token {
