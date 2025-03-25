@@ -4,9 +4,12 @@
 #include "../../include/service.h"
 
 #include <algorithm>
-#include <iostream>
+#include <ftxui/dom/elements.hpp>
+#include <ftxui/screen/screen.hpp>
 #include <string>
 #include <vector>
+
+using namespace ftxui;
 
 const std::unordered_map<std::string, std::string> figures = {
     {"wK", "♚"}, {"wQ", "♛"}, {"wR", "♜"}, {"wN", "♞"},
@@ -16,30 +19,8 @@ const std::unordered_map<std::string, std::string> figures = {
 
 std::vector<char> letters = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
 
-void Board::printLetters() {
-  for (short i = 0; i < letters.size(); i++) {
-    short index;
-    if (Game::color == "white")
-      index = i;
-
-    else
-      index = letters.size() - 1 - i;
-
-    std::cout << " " << letters[index];
-  }
-}
-
 void Board::render(std::string error) {
-  Service service;
-  service.clear();
-
   std::string board[8][8];
-
-  if (error.size() > 0) {
-    std::cout << error << std::endl;
-    std::cout << std::endl;
-  }
-
   for (short i = 0; i < 8; i++) {
     for (short j = 0; j < 8; j++) {
       board[i][j] = Game::chessboard[i][j];
@@ -48,50 +29,68 @@ void Board::render(std::string error) {
 
   if (Game::color == "black") {
     for (short i = 0; i < 8 / 2; ++i) {
-      swap(board[i], board[8 - i - 1]);
+      std::swap(board[i], board[8 - i - 1]);
     }
-
     for (short i = 0; i < 8; ++i) {
-      reverse(board[i], board[i] + 8);
+      std::reverse(board[i], board[i] + 8);
     }
   }
 
-  std::cout << " ";
-  this->printLetters();
-  std::cout << std::endl;
+  auto createCell = [](const std::string &content, bool isWhite) {
+    return text(content) | size(WIDTH, EQUAL, 3) | center |
+           bgcolor(isWhite ? Color::RGB(0, 0, 0) : Color::RGB(41, 41, 41));
+  };
 
+  auto createLetterRow = [this]() {
+    Elements lettersElements = {text("   ")};
+    for (short i = 0; i < letters.size(); i++) {
+      short index = (Game::color == "white") ? i : letters.size() - 1 - i;
+      lettersElements.push_back(
+          text(" " + std::string(1, letters[index]) + " ") | center);
+    }
+
+    return hbox(lettersElements);
+  };
+
+  Elements rows;
   for (short i = 0; i < 8; i++) {
-    short number = 8 - i;
+    short number = (Game::color == "black") ? i + 1 : 8 - i;
+    Elements rowElements;
 
-    if (Game::color == "black")
-      number = i + 1;
-
-    std::cout << number;
+    rowElements.push_back(text(" " + std::to_string(number) + " ") | center);
 
     for (short j = 0; j < 8; j++) {
-      std::string figure;
-
-      if (board[i][j] == "  ")
-        figure = " ";
-
-      else
-        figure = figures.at(board[i][j]);
-
-      std::cout << " " << figure;
+      std::string figure =
+          (board[i][j] == "  ") ? " " : figures.at(board[i][j]);
+      bool isWhiteCell = (i + j) % 2 == 0;
+      rowElements.push_back(createCell(" " + figure + " ", isWhiteCell));
     }
 
-    std::cout << " " << number;
-    std::cout << std::endl;
+    rowElements.push_back(text(" " + std::to_string(number) + " ") | center);
+
+    rows.push_back(hbox(rowElements));
   }
 
-  std::cout << " ";
-  this->printLetters();
-  std::cout << std::endl;
+  auto boardDocument = vbox({createLetterRow(), vbox(rows), createLetterRow()});
+
+  auto document = center(vcenter(vbox(
+      filler() | size(HEIGHT, EQUAL, 1),
+      text("Your opponent: " + Game::opponent) | bold | dim,
+      filler() | size(HEIGHT, EQUAL, 1),
+      error.empty() ? boardDocument
+                    : vbox({text(error) | color(Color::Red) | center,
+                            filler() | size(HEIGHT, EQUAL, 1), boardDocument}),
+      filler() | size(HEIGHT, EQUAL, 1))));
+
+  auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
+  Render(screen, document);
+  screen.Print();
 }
 
 void Board::move(std::string c) {
   Figures figures;
   Game game;
+  Service service;
 
   std::vector coordinates = figures.getCoordinates(c);
 
@@ -105,4 +104,6 @@ void Board::move(std::string c) {
 
   if (figures.checkmate(Game::chessboard))
     game.mate();
+
+  service.renderWithClear();
 }

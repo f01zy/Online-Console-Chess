@@ -86,3 +86,11 @@ void Socket::send(std::string event, std::string data) {
 void Socket::on(std::string event, std::function<void(sio::event &)> callback) {
   c.socket()->on(event, callback);
 }
+
+void Service::renderWithClear() {
+  Board board;
+  Service service;
+
+  service.clear();
+  board.render();
+}

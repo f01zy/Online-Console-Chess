@@ -13,8 +13,9 @@
 using namespace ftxui;
 
 void Service::clear() { system("clear"); }
-void Service::sleep(short seconds) {
-  std::this_thread::sleep_for(std::chrono::seconds(1));
+void Service::sleep(double seconds) {
+  int milliseconds = static_cast<int>(seconds * 1000);
+  std::this_thread::sleep_for(std::chrono::milliseconds(milliseconds));
 }
 
 std::string Service::charToString(char symbol) {

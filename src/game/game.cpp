@@ -58,6 +58,10 @@ void Game::menu() {
 
   switch (choice) {
   case 0:
+    this->isNeedToFinishAGame = false;
+    this->isYourMove = false;
+    this->opponent.clear();
+    this->color.clear();
     this->searchOpponent();
     break;
 
@@ -81,8 +85,6 @@ void Game::menu() {
     this->menu();
     break;
   }
-
-  return;
 }
 
 void Game::start() {
@@ -103,22 +105,14 @@ void Game::play() {
   Service service;
 
   this->initChessboard();
+  service.renderWithClear();
 
-  while (!this->isNeedToFinishAGame) {
-    service.clear();
-
-    board.render();
-
+  do {
     if (this->isYourMove)
       this->move();
 
-    service.sleep(1);
-  }
-
-  this->isNeedToFinishAGame = false;
-  this->isYourMove = false;
-  this->opponent.clear();
-  this->color.clear();
+    service.sleep(0.01);
+  } while (!Game::isNeedToFinishAGame);
 
   this->menu();
 }
@@ -147,12 +141,31 @@ void Game::move() {
   Service service;
 
   std::string username = Auth::user["username"];
-
-  std::cout << std::endl;
-  std::cout << "Coordinates: ";
-
   std::string coordinates;
-  std::cin >> coordinates;
+
+  InputOption inputOption;
+  inputOption.multiline = false;
+
+  Component inputCoordinates = Input(&coordinates, "Coordinates", inputOption);
+  auto screen = ScreenInteractive::TerminalOutput();
+  auto component = Container::Vertical({inputCoordinates});
+
+  auto handleEnter = CatchEvent(component, [&](Event event) {
+    if (event == Event::Return) {
+      screen.Exit();
+      return true;
+    }
+    return false;
+  });
+
+  auto renderer = Renderer(handleEnter, [&] {
+    return center(vbox({
+        filler() | size(HEIGHT, EQUAL, 2),
+        inputCoordinates->Render() | size(WIDTH, EQUAL, 30),
+    }));
+  });
+
+  screen.Loop(renderer);
 
   if (!figures.validateMove(figures.getCoordinates(coordinates))) {
     service.clear();
@@ -166,6 +179,8 @@ void Game::move() {
 
   std::string data = username + " " + coordinates;
   socket.send("move", data);
+
+  service.renderWithClear();
 }
 
 void Game::waiting() {

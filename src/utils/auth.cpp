@@ -46,10 +46,8 @@ void Auth::render(std::string error) {
     Component inputPassword = Input(&password, "Password", inputOption);
     Component inputConfirm = Input(&confirm, "Confirm password", inputOption);
 
-    const int input_width = 30;
-
-    auto fixedInput = [input_width](Component input) {
-      return input->Render() | size(WIDTH, EQUAL, input_width);
+    auto fixedInput = [](Component input) {
+      return input->Render() | size(WIDTH, EQUAL, 30);
     };
 
     std::vector<std::string> options = {"Sing In", "Sign Up", "Exit"};
