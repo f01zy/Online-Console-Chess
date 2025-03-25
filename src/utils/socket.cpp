@@ -74,7 +74,10 @@ Socket::Socket(std::string url) {
   c.connect(url);
 }
 
-Socket::~Socket() { c.socket()->close(); }
+Socket::~Socket() {
+  this->c.clear_con_listeners();
+  this->c.sync_close();
+}
 
 void Socket::send(std::string event, std::string data) {
   c.socket()->emit(event, data);
