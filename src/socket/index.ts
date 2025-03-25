@@ -7,7 +7,6 @@ type TPartyUser = [string, TColor, string]
 type TParty = [TPartyUser, TPartyUser]
 
 const colors: [TColor, TColor] = ["black", "white"]
-
 let waiting: Array<[string, string]> = []
 let parties: Array<TParty> = []
 
@@ -22,6 +21,7 @@ export const loadIoListeners = (io: Server) => {
 
       if (userExists) {
         username = party.find(user => user[2] === id)?.[0]
+        console.log(username)
         return false
       }
 
