@@ -21,7 +21,6 @@ export const loadIoListeners = (io: Server) => {
 
       if (userExists) {
         username = party.find(user => user[2] === id)?.[0]
-        console.log(username)
         return false
       }
 
