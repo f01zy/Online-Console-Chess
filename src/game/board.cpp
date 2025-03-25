@@ -78,7 +78,7 @@ void Board::render(std::string error) {
       text("Your opponent: " + Game::opponent) | bold | dim,
       filler() | size(HEIGHT, EQUAL, 1),
       error.empty() ? boardDocument
-                    : vbox({text(error) | color(Color::Red) | center,
+                    : vbox({text(error) | color(Color::Red),
                             filler() | size(HEIGHT, EQUAL, 1), boardDocument}),
       filler() | size(HEIGHT, EQUAL, 1))));
 

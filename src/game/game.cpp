@@ -78,13 +78,10 @@ void Game::menu() {
 
   case 4:
     service.openPageInBrowser(GITHUB);
-    this->menu();
-    break;
-
-  default:
-    this->menu();
     break;
   }
+
+  this->menu();
 }
 
 void Game::start() {
@@ -113,8 +110,6 @@ void Game::play() {
 
     service.sleep(0.01);
   } while (!Game::isNeedToFinishAGame);
-
-  this->menu();
 }
 
 void Game::initChessboard() {
@@ -170,7 +165,7 @@ void Game::move() {
   if (!figures.validateMove(figures.getCoordinates(coordinates))) {
     service.clear();
     board.render("Dont valid coordinates.");
-    return this->move();
+    return;
   }
 
   board.move(coordinates);
@@ -254,5 +249,4 @@ void Game::profile() {
   });
 
   screen.Loop(finalComponent);
-  this->menu();
 }

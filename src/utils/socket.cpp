@@ -6,6 +6,7 @@
 
 #include <cstdlib>
 #include <functional>
+#include <iostream>
 #include <sio_message.h>
 #include <sio_socket.h>
 #include <string>

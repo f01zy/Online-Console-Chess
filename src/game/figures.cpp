@@ -97,6 +97,9 @@ bool Figures::validateMove(std::vector<short> coordinates) {
 
   std::string figure(1, Game::chessboard[coordinates[1]][coordinates[0]][1]);
 
+  if (figure == " ")
+    return false;
+
   return this->validateFunctions[figure](Game::chessboard, coordinates) &&
          this->requiredMoveValidate(coordinates);
 }
