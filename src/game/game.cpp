@@ -3,6 +3,7 @@
 #include "../../include/board.h"
 #include "../../include/figures.h"
 #include "../../include/globals.h"
+#include "../../include/http.h"
 #include "../../include/service.h"
 #include "../../include/socket.h"
 
@@ -12,9 +13,11 @@
 #include <ftxui/dom/elements.hpp>
 #include <ftxui/dom/table.hpp>
 #include <iostream>
+#include <nlohmann/json.hpp>
 #include <string>
 #include <vector>
 
+using json = nlohmann::json;
 using namespace ftxui;
 
 std::string Game::opponent = "";
@@ -25,6 +28,8 @@ bool Game::isNeedToFinishAGame = false;
 
 void Game::mode() {
   Service service;
+  Http http;
+
   service.clear();
 
   std::vector<std::string> options = {"Online", "Local"};
@@ -42,6 +47,13 @@ void Game::mode() {
   default:
     this->mode();
     break;
+  }
+
+  std::string res = http.request("/status");
+
+  if (res.empty()) {
+    std::cout << "API is not available." << std::endl;
+    exit(0);
   }
 }
 
