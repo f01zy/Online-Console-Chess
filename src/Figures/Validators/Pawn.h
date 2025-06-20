@@ -25,6 +25,9 @@ public:
     if (c[0] != c[2] && board[c[3]][c[2]][0] != opponentColor)
       return false;
 
+    if (c[0] == c[2] && board[c[3]][c[2]][0] == opponentColor)
+      return false;
+
     if (c[0] != c[2] && abs(c[1] - c[3]) == 1)
       return true;
 

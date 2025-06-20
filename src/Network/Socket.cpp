@@ -3,6 +3,7 @@
 #include "../Board/Board.h"
 #include "../Game/Game.h"
 #include "../Utils/Utils.h"
+#include "../globals.h"
 #include <functional>
 #include <vector>
 
@@ -78,4 +79,9 @@ void Socket::send(std::string event, std::string data) {
 
 void Socket::on(std::string event, std::function<void(sio::event &)> callback) {
   c.socket()->on(event, callback);
+}
+
+Socket &Socket::getInstance() {
+  static Socket instance(getApiUrl());
+  return instance;
 }

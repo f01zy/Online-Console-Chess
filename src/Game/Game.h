@@ -15,8 +15,8 @@ public:
   void menu();
   void start();
   void searchOpponent();
-  void waiting();
   void readyToGame();
+  void waiting();
   void mate();
   void profile();
 };

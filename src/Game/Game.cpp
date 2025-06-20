@@ -118,7 +118,7 @@ void Game::play() {
     if (isYourMove)
       move();
 
-    utils.sleep(0.01);
+    utils.sleep(0.05);
   }
 }
 
