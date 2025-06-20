@@ -1,5 +1,4 @@
-#include "../include/globals.h"
-
+#include "globals.h"
 #include "string"
 
 std::string API_URL = "";

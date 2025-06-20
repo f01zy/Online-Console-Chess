@@ -1,0 +1,3 @@
+/home/aminov/Documents/Programming/projects/Chess/client/build/CMakeFiles/chess.dir
+/home/aminov/Documents/Programming/projects/Chess/client/build/CMakeFiles/edit_cache.dir
+/home/aminov/Documents/Programming/projects/Chess/client/build/CMakeFiles/rebuild_cache.dir
