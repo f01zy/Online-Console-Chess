@@ -29,7 +29,6 @@ void Game::mode() {
   Http http;
 
   utils.clear();
-
   short choice;
 
   while (1) {
@@ -47,8 +46,7 @@ void Game::mode() {
     }
   }
 
-  std::string res = http.request("/status");
-
+  std::string res = http.request("/");
   if (res.empty()) {
     std::cout << "API is not available." << std::endl;
     exit(0);
@@ -61,7 +59,6 @@ void Game::menu() {
   Socket &socket = Socket::getInstance();
 
   utils.clear();
-
   std::vector<std::string> options = {"Online game", "Profile", "Log out",
                                       "Exit", "Github"};
   short choice = utils.menu(options, "Menu");
@@ -100,11 +97,13 @@ void Game::start() {
 
   std::string isAuth = auth.refresh();
 
-  if (isAuth.size() > 0)
+  if (isAuth.size() > 0) {
     auth.render();
+  }
 
-  else
+  else {
     menu();
+  }
 }
 
 void Game::play() {
@@ -115,8 +114,9 @@ void Game::play() {
   utils.renderWithClear();
 
   while (!Game::isNeedToFinishAGame) {
-    if (isYourMove)
+    if (isYourMove) {
       move();
+    }
 
     utils.sleep(0.05);
   }
@@ -152,7 +152,6 @@ void Game::move() {
         inputCoordinates->Render() | size(WIDTH, EQUAL, 30),
     }));
   });
-
   screen.Loop(renderer);
 
   if (!figures.validateMove(figures.getCoordinates(coordinates))) {
@@ -173,26 +172,11 @@ void Game::move() {
 void Game::waiting() {
   Utils utils;
 
-  short state = 1;
-  char waitChar = '.';
-
   while (opponent.size() == 0) {
     utils.clear();
     Socket &socket = Socket::getInstance();
     std::string username = Auth::user["username"];
-    std::string wait = "";
-
-    for (short i = 0; i < state; i++)
-      wait += waitChar;
-
-    if (state == 3)
-      state = 1;
-
-    else
-      state++;
-
-    std::cout << "Waiting" << wait << std::endl;
-
+    std::cout << "Waiting." << std::endl;
     utils.sleep(1);
   }
 

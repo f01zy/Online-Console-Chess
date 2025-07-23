@@ -2,6 +2,7 @@
 #include "../globals.h"
 #include <curl/curl.h>
 #include <curl/easy.h>
+#include <nlohmann/detail/value_t.hpp>
 
 size_t Http::WriteCallback(void *contents, size_t size, size_t nmemb,
                            void *userp) {
@@ -15,11 +16,10 @@ std::string Http::request(std::string endpoint, std::string data) {
   std::string readBuffer;
 
   curl_global_init(CURL_GLOBAL_DEFAULT);
-
   curl = curl_easy_init();
 
   if (curl) {
-    std::string url = getApiUrl() + "/api/v1" + endpoint;
+    std::string url = getApiUrl() + "/api" + endpoint;
 
     if (data.size() > 0) {
       struct curl_slist *headers = NULL;
@@ -37,7 +37,6 @@ std::string Http::request(std::string endpoint, std::string data) {
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &readBuffer);
 
     res = curl_easy_perform(curl);
-
     curl_easy_cleanup(curl);
 
     return readBuffer;

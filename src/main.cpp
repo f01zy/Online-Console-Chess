@@ -2,7 +2,6 @@
 
 int main() {
   Game game;
-
   game.mode();
   game.start();
 }

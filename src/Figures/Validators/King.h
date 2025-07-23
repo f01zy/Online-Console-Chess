@@ -6,10 +6,11 @@
 
 class King : public Figure {
 public:
-  short points;
+  short points = 1;
   static bool validate(std::string board[8][8], std::vector<short> c) {
-    if (abs(c[1] - c[3]) > 1 || abs(c[0] - c[2]) > 1)
+    if (abs(c[1] - c[3]) > 1 || abs(c[0] - c[2]) > 1) {
       return false;
+    }
 
     return true;
   };

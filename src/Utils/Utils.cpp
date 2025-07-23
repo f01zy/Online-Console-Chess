@@ -25,11 +25,13 @@ std::string Utils::charToString(char symbol) {
 short Utils::getAlphabetIndex(char letter) {
   letter = tolower(letter);
 
-  if (letter >= 'a' && letter <= 'z')
+  if (letter >= 'a' && letter <= 'z') {
     return letter - 'a';
+  }
 
-  else
+  else {
     return -1;
+  }
 }
 
 void Utils::openPageInBrowser(std::string page) {
@@ -66,8 +68,8 @@ short Utils::menu(std::vector<std::string> options, std::string message) {
                                component->Render()))) |
            bgcolor(Color::Black);
   });
-
   screen.Loop(renderer);
+
   return selected;
 }
 

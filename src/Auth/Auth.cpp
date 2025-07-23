@@ -6,12 +6,12 @@
 #include "ftxui/component/screen_interactive.hpp"
 #include <fstream>
 #include <iostream>
+#include <nlohmann/detail/value_t.hpp>
 #include <nlohmann/json.hpp>
 #include <string>
 
 using json = nlohmann::json;
 using namespace ftxui;
-
 json Auth::user = json::object();
 
 void Auth::render(std::string error) {
@@ -34,12 +34,10 @@ void Auth::render(std::string error) {
 
     InputOption inputOption;
     inputOption.multiline = false;
-
     Component inputEmail = Input(&email, "Email", inputOption);
     Component inputUsername = Input(&username, "Username", inputOption);
 
     inputOption.password = true;
-
     Component inputPassword = Input(&password, "Password", inputOption);
     Component inputConfirm = Input(&confirm, "Confirm password", inputOption);
 
@@ -50,7 +48,6 @@ void Auth::render(std::string error) {
     std::vector<std::string> options = {"Sing In", "Sign Up", "Exit"};
     short choice =
         utils.menu(options, error.size() == 0 ? "Authentication" : error);
-
     auto screen = ScreenInteractive::Fullscreen();
     utils.clear();
 
@@ -74,18 +71,17 @@ void Auth::render(std::string error) {
                }))) |
                bgcolor(Color::Black);
       });
-
       screen.Loop(renderer);
 
       std::string res = signIn(email, password);
-
       if (res.size() == 0) {
         game.menu();
         return;
       }
 
-      else
+      else {
         error = res;
+      }
     }
 
     else if (choice == 1) {
@@ -111,27 +107,27 @@ void Auth::render(std::string error) {
                }))) |
                bgcolor(Color::Black);
       });
-
       screen.Loop(renderer);
 
       if (!validatePassword(password, confirm)) {
-        error = "Passwords do not match";
+        error = "Passwords don't match.";
         continue;
       }
 
       std::string res = signUp(email, username, password);
-
       if (res.size() == 0) {
         game.menu();
         return;
       }
 
-      else
+      else {
         error = res;
+      }
     }
 
-    else if (choice == 2)
+    else if (choice == 2) {
       exit(0);
+    }
   }
 }
 
@@ -192,12 +188,13 @@ std::string Auth::successRequestCallback(std::string res) {
       return "";
     }
 
-    else
+    else {
       return data["message"];
+    }
   }
 
   catch (const json::parse_error &e) {
-    return "Response parse error";
+    return "Response parse error.";
   }
 }
 

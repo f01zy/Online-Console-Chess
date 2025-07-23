@@ -31,8 +31,9 @@ void findOpponent(sio::event &event) {
     Game::opponent = data[opponentIndex]->get_vector()[0]->get_string();
     Game::color = color;
 
-    if (color == "white")
+    if (color == "white") {
       Game::isYourMove = true;
+    }
   }
 }
 
@@ -52,8 +53,9 @@ void moveEvent(sio::event &event) {
 void opponentLose(sio::event &event) {
   std::string username = event.get_message()->get_string();
 
-  if (username == Game::opponent)
+  if (username == Game::opponent) {
     Game::isNeedToFinishAGame = true;
+  }
 }
 
 Socket::Socket(std::string url) {

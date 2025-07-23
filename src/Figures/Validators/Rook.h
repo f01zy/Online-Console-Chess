@@ -7,8 +7,9 @@ class Rook : public Figure {
 public:
   short points = 5;
   static bool validate(std::string board[8][8], std::vector<short> c) {
-    if (c[1] != c[3] && c[0] != c[2])
+    if (c[1] != c[3] && c[0] != c[2]) {
       return false;
+    }
 
     short dirX = (c[2] - c[0]) == 0 ? 0 : (c[2] - c[0]) > 0 ? 1 : -1;
     short dirY = (c[3] - c[1]) == 0 ? 0 : (c[3] - c[1]) > 0 ? 1 : -1;
@@ -17,8 +18,9 @@ public:
     short y = c[1] + dirY;
 
     while (x != c[2] || y != c[3]) {
-      if (board[y][x] != "  ")
+      if (board[y][x] != "  ") {
         return false;
+      }
 
       x += dirX;
       y += dirY;
