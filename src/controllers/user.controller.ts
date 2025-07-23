@@ -2,9 +2,9 @@ import type { NextFunction, Request, Response } from "express";
 import { MailService } from "../services/mail.service";
 import { TokenService } from "../services/token.service";
 import { UserService } from "../services/user.service";
-import { prisma } from "../../prisma";
+import { prisma } from "../prisma";
 import { validationResult } from "express-validator";
-import { ApiError } from "../../exceptions/api.exception";
+import { ApiError } from "../exceptions/api.exception";
 
 const userService = new UserService()
 const tokenService = new TokenService()
@@ -14,7 +14,6 @@ export class UserController {
   public async register(req: Request, res: Response, next: NextFunction) {
     try {
       const errors = validationResult(req)
-
       if (!errors.isEmpty()) {
         return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
       }
@@ -31,13 +30,11 @@ export class UserController {
   public async login(req: Request, res: Response, next: NextFunction) {
     try {
       const errors = validationResult(req)
-
       if (!errors.isEmpty()) {
         return next(ApiError.BadRequest(errors.array()[0].msg, errors.array()))
       }
 
       const { email, password } = req.body
-
       const user = await userService.login(email, password)
 
       res.json(user)
@@ -61,8 +58,6 @@ export class UserController {
     try {
       const activationCode = req.params.code
       await userService.activate(activationCode)
-
-      res.json({ status: "success" })
     } catch (e) {
       next(e)
     }
@@ -73,10 +68,7 @@ export class UserController {
       const { refreshToken } = req.body
       const user = await tokenService.getUserByRefreshToken(refreshToken)
       const activationCode = user.activationCode
-
       await mailService.sendActivationMail(user.email, activationCode)
-
-      res.json({ status: "success" })
     } catch (e) {
       next(e)
     }
@@ -85,9 +77,9 @@ export class UserController {
   public async refresh(req: Request, res: Response, next: Function) {
     try {
       const { refreshToken } = req.body
-      const userData = await userService.refresh(refreshToken)
+      const user = await userService.refresh(refreshToken)
 
-      res.json(userData)
+      res.json(user)
     } catch (e) {
       next(e)
     }
@@ -97,7 +89,6 @@ export class UserController {
     try {
       const { id } = req.params
       const userId = parseInt(id)
-
       const user = await prisma.user.findUnique({ where: { id: userId } })
 
       res.json(user)

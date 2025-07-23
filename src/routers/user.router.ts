@@ -3,7 +3,6 @@ import { body } from "express-validator"
 import { UserController } from "../controllers/user.controller"
 
 const userController = new UserController()
-
 export const authRouter = Router()
 
 authRouter.post("/register",

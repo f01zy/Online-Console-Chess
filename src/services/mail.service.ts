@@ -1,6 +1,6 @@
-import { Variables } from "../../env/variables.env"
+import { Variables } from "../env/variables.env"
 import nodemailer from "nodemailer"
-import { ApiError } from "../../exceptions/api.exception"
+import { ApiError } from "../exceptions/api.exception"
 
 export class MailService {
   private transporter: nodemailer.Transporter
@@ -20,20 +20,20 @@ export class MailService {
   public async sendActivationMail(to: string, code: string) {
     try {
       await this.transporter.sendMail({
-        from: process.env.SMTP_USER,
+        from: Variables.SMTP_USERNAME,
         to,
-        subject: `Активация аккаунта Chess`,
+        subject: `Account activation on Chess.`,
         text: "",
         html:
           `
           <div>
-            <h1>Для активации аккаунта введите этот код в консоли</h1>
+            <h1>For account activation enter this code.</h1>
             <p>${code}</p>
           </div>
           `
       })
     } catch (err) {
-      throw ApiError.BadRequest("Cannot send email")
+      throw ApiError.BadRequest("Cannot send email.")
     }
   }
 }

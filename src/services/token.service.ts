@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
-import { Variables } from "../../env/variables.env"
-import { prisma } from "../../prisma"
-import { ApiError } from "../../exceptions/api.exception"
+import { Variables } from "../env/variables.env"
+import { prisma } from "../prisma"
+import { ApiError } from "../exceptions/api.exception"
 
 export class TokenService {
   public async validateRefresh(token: string) {
@@ -27,24 +27,24 @@ export class TokenService {
 
   public async saveToken(userId: number, refreshToken: string) {
     const token = await prisma.token.findFirst({ where: { userId } })
-
     if (token) {
       token.refreshToken = refreshToken
     }
-
     const tokenCreated = await prisma.token.create({ data: { userId, refreshToken } })
+
     return tokenCreated
   }
 
   public async removeToken(refreshToken: string) {
     const user = await this.getUserByRefreshToken(refreshToken)
-
     const token = await prisma.token.deleteMany({ where: { userId: user.id } })
+
     return token
   }
 
   public async findToken(refreshToken: string) {
     const token = await prisma.token.findFirst({ where: { refreshToken } })
+
     return token
   }
 
@@ -55,15 +55,13 @@ export class TokenService {
 
     const userData = await this.validateRefresh(refreshToken)
     const tokenDb = await this.findToken(refreshToken)
-
     if (!tokenDb || !userData) {
       throw ApiError.UnauthorizedError()
     }
 
     const user = await prisma.user.findUnique({ where: { id: userData.id } })
-
     if (!user) {
-      throw ApiError.BadRequest("Invalid token")
+      throw ApiError.BadRequest("Invalid token.")
     }
 
     return user

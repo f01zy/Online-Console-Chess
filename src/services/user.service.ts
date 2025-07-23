@@ -1,5 +1,5 @@
-import { ApiError } from "../../exceptions/api.exception"
-import { prisma } from "../../prisma"
+import { ApiError } from "../exceptions/api.exception"
+import { prisma } from "../prisma"
 import { MailService } from "./mail.service"
 import { TokenService } from "./token.service"
 import bcrypt from "bcrypt"
@@ -11,22 +11,19 @@ const tokenService = new TokenService()
 export class UserService {
   public async register(username: string, email: string, password: string) {
     const candidateEmail = await prisma.user.findFirst({ where: { email } })
-
     if (candidateEmail) {
-      throw ApiError.BadRequest("A user with this email already exists")
+      throw ApiError.BadRequest("The user with this email already exists.")
     }
 
     const candidateUsername = await prisma.user.findFirst({ where: { username } })
-
     if (candidateUsername) {
-      throw ApiError.BadRequest("A user with this username already exists")
+      throw ApiError.BadRequest("The user with this username already exists.")
     }
 
     const hashPassword = await bcrypt.hash(password, 3)
-    const activationCode = crypto.randomBytes(10).toString('hex').slice(0, 10);
+    const activationCode = crypto.randomUUID();
 
     // await mailService.sendActivationMail(email, activationCode)
-
     const user = await prisma.user.create({ data: { username, email, password: hashPassword, activationCode } })
 
     const tokens = await tokenService.generateTokens(user.id)
@@ -40,15 +37,13 @@ export class UserService {
 
   public async login(email: string, password: string) {
     const user = await prisma.user.findFirst({ where: { email } })
-
     if (!user) {
-      throw ApiError.BadRequest("The user with this email was not found")
+      throw ApiError.BadRequest("The user with this email was not found.")
     }
 
     const isPass = await bcrypt.compare(password, user.password)
-
     if (!isPass) {
-      throw ApiError.BadRequest("Incorrect password")
+      throw ApiError.BadRequest("Incorrect password.")
     }
 
     const tokens = await tokenService.generateTokens(user.id)
@@ -62,14 +57,14 @@ export class UserService {
 
   public async logout(refreshToken: string) {
     const token = await tokenService.removeToken(refreshToken)
+
     return token
   }
 
   public async activate(activationCode: string) {
     const user = await prisma.user.findFirst({ where: { activationCode } })
-
     if (!user) {
-      throw ApiError.BadRequest("Non-direct activation code")
+      throw ApiError.BadRequest("Non-direct activation code.")
     }
 
     user.isActivated = true

@@ -12,11 +12,11 @@ export class ApiError {
   }
 
   public static UnauthorizedError() {
-    return new ApiError(401, "User is not auth")
+    return new ApiError(401, "User isn't auth.")
   }
 
   public static NotFound() {
-    return new ApiError(404, "Not found")
+    return new ApiError(404, "Not found.")
   }
 
   public static BadRequest(message: string, errors: ValidationError[] = []) {

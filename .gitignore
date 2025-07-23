@@ -25,5 +25,5 @@ coverage
 # Finder (MacOS) folder config
 .DS_Store
 
-# Logs
+# logs
 combined.log

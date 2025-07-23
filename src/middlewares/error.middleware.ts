@@ -1,4 +1,4 @@
-import type { Request, Response, ErrorRequestHandler } from "express";
+import type { Request, Response } from "express";
 import { ApiError } from "../exceptions/api.exception";
 
 export default (err: ApiError, req: Request, res: Response, next: Function) => {
@@ -8,5 +8,5 @@ export default (err: ApiError, req: Request, res: Response, next: Function) => {
     return res.status(err.status).json({ ...err })
   }
 
-  return res.status(500).json({ message: "Server error" })
+  return res.status(500).json({ message: "API error." })
 }
