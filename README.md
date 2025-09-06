@@ -1,5 +1,3 @@
-![video](https://i.imgur.com/Fg0FeTC.gif)
-
 # Chess
 A project that allows you to play chess with other people from the console. You can deploy a [server](https://github.com/f01zy/Chess/tree/server) locally and play, for example, on one computer, or use our remote server to play with other people.
 
